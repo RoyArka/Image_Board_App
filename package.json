@@ -1,0 +1,29 @@
+{
+  "name": "2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Back-End/index.js",
+  "scripts": {
+    "start": "node Back-End/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mozdoba/COMP4537TermProj.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mozdoba/COMP4537TermProj/issues"
+  },
+  "homepage": "https://github.com/Mozdoba/COMP4537TermProj#readme",
+  "dependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.23.1",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "prettier": "^2.2.1"
+  }
+}
