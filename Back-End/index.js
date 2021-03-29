@@ -1,4 +1,7 @@
+// library imports first
 const express = require("express");
+
+// remaining imports alphabetized
 const sqlQueries = require("./util/sql-queries");
 
 const {
@@ -8,6 +11,7 @@ const {
   selectAll,
   selectLastRow,
 } = sqlQueries;
+
 
 const app = express();
 const endPointRoot = "COMP4537/termproj/api/v1/";
@@ -19,6 +23,8 @@ app.use(express.static("Front-End"));
 app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
 
+
+//functions alphabetized
 app.delete(endPointRoot, (req, res) => {
   // TODO: DELETE Logic
 });
