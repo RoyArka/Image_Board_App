@@ -20,9 +20,7 @@ app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
 
 app.delete(endPointRoot, (req, res) => {
-  console.log("DELETE", req.body);
-  console.log("ID", req.body.id);
-  deleteRowFromTable(req.body.id);
+  // TODO: DELETE Logic
 });
 
 app.get("/", (req, res) => {
@@ -34,33 +32,15 @@ app.get("/admin", (req, res) => {
 });
 
 app.get(endPointRoot, (req, res) => {
-  console.log("GET", req.body);
-  const isAdmin = req.query.isAdmin === "true" ? true : false;
-  selectAll({
-    res: res,
-    isAdmin: isAdmin,
-  });
+    // TODO: GET Logic
 });
 
 app.post(endPointRoot, (req, res) => {
-  console.log("POST", req.body);
-  insert({
-    quote: req.body.quote,
-    author: req.body.author,
-  });
-  selectLastRow({
-    res: res,
-    isGetRequest: false,
-  });
+    // TODO: POST Logic
 });
 
 app.put(endPointRoot, (req, res) => {
-    console.log("PUT", req.body)
-    update({
-      id: req.body.id,
-      quote: req.body.quote,
-      author: req.body.author,
-    });
+    // TODO: PUT Logic
 });
 
 app.listen(port, () => {
