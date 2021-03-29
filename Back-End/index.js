@@ -7,11 +7,10 @@ const sqlQueries = require("./util/sql-queries");
 const {
   deleteRowFromTable,
   insert,
-  update,
   selectAll,
   selectLastRow,
+  update,
 } = sqlQueries;
-
 
 const app = express();
 const endPointRoot = "COMP4537/termproj/api/v1/";
@@ -24,7 +23,7 @@ app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
 
 
-//functions alphabetized
+// functions alphabetized
 app.delete(endPointRoot, (req, res) => {
   // TODO: DELETE Logic
 });
