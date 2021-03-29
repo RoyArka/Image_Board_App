@@ -10,7 +10,7 @@ const {
 } = sqlQueries;
 
 const app = express();
-const endPointRoot = "/COMP4537/assignment1/v1/quotes";
+const endPointRoot = "COMP4537/termproj/api/v1/";
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -33,25 +33,12 @@ app.get("/admin", (req, res) => {
   res.sendFile(__dirname + "/admin.html")
 });
 
-app.get("/reader", (req, res) => {
-  res.sendFile(__dirname + "/reader.html")
-});
-
 app.get(endPointRoot, (req, res) => {
   console.log("GET", req.body);
   const isAdmin = req.query.isAdmin === "true" ? true : false;
   selectAll({
     res: res,
     isAdmin: isAdmin,
-  });
-});
-
-app.get(`${endPointRoot}/1`, (req, res) => {
-  console.log("GET", req.body);
-  console.log("Query", req.query);
-  selectLastRow({
-    res: res,
-    isGetRequest: true,
   });
 });
 
@@ -78,5 +65,4 @@ app.put(endPointRoot, (req, res) => {
 
 app.listen(port, () => {
     console.log("Connected! Waiting for request on port", port);
-    console.log(__dirname);
 });

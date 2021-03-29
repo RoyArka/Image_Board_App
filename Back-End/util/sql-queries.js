@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const formatResult = require("./format-result");
+const formatResult = require("./example-util");
 
 const remoteDB = {
   host: "localhost",
@@ -52,7 +52,7 @@ const selectAll = ({ res, isAdmin }) => {
       return;
     }
 
-    res.end(formatResult(result));
+    res.end(exampleUtil(result));
     return;
   });
 }
