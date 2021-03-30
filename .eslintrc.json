@@ -1,9 +1,4 @@
 {
-  "ignorePatterns": [".next/", "node_modules/", "public/"],
-  "globals": {
-    "cy": true
-    // "ga": true,
-  },
   "env": {
     "browser": true,
     "commonjs": true,
@@ -14,15 +9,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:prettier/recommended",
-    "plugin:react/recommended",
     "prettier"
   ],
-  "settings": {
-    "react": {
-      "version": "16.0"
-    }
-  },
-  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2019,
     "ecmaFeatures": {
@@ -32,14 +20,9 @@
     "sourceType": "module",
     "allowImportExportEverywhere": true
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error",
     "prettier/prettier": "error",
-    "react/prop-types": "off",
-    "react/display-name": "off",
     "linebreak-style": ["error", "unix"],
     "max-lines": [
       "error",
