@@ -1,6 +1,6 @@
 // module declarations alphabetized
 const DELETE = "DELETE";
-const endPointRoot = "COMP4537/termproj/api/v1/";
+const endPointRoot = "4537/termproject/API/V1/";
 const GET = "GET";
 const POST = "POST";
 const PUT = "PUT";
@@ -30,7 +30,7 @@ const loadImages = () => {
 };
 
 const createImage = (id) => {
-  let payload = JSON.stringify({
+  const payload = JSON.stringify({
     id: id,
   });
 

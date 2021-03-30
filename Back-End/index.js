@@ -13,7 +13,7 @@ const {
 } = sqlQueries;
 
 const app = express();
-const endPointRoot = "COMP4537/termproj/api/v1/";
+const endPointRoot = "4537/termproject/API/V1/";
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -21,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Front-End"));
 app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
-
 
 // functions alphabetized
 app.delete(endPointRoot, (req, res) => {
