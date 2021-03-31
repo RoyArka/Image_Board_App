@@ -27,13 +27,13 @@ app.delete(endPointRoot, (req, res) => {
   // TODO: DELETE Logic
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html")
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/index.html")
+// });
 
-app.get("/admin", (req, res) => {
-  res.sendFile(__dirname + "../Front-End/admin.html")
-});
+// app.get("/admin", (req, res) => {
+//   res.sendFile(__dirname + "/admin.html")
+// });
 
 app.get(endPointRoot, (req, res) => {
     // TODO: GET Logic

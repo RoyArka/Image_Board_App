@@ -2,9 +2,9 @@
   "name": "2",
   "version": "1.0.0",
   "description": "",
-  "main": "Back-End/index.js",
+  "main": "Front-End/index.js",
   "scripts": {
-    "start": "node Back-End/index.js"
+    "start": "node Front-End/index.js"
   },
   "repository": {
     "type": "git",
