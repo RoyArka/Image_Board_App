@@ -60,3 +60,34 @@ const updateImage = (id) => {
     }
   };
 };
+
+//login POST request function 
+loginPost = () => {
+  console.log("POST Request Sent!");
+  let counter = 0;
+  xhttp.open(POST, endPointRoot + "login")
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send("new user");
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      counter++;
+      console.log(this);
+      document.getElementById("res2").innerHTML = counter;
+    }
+  };
+}
+
+//location GET request function 
+locationGet = () => {
+  console.log("GET Request Sent!");
+  let counter = 0;
+  xhttp.open(GET, endPointRoot + "location", true);
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      counter++;
+      console.log(this);
+      document.getElementById("res1").innerHTML = counter;
+    }
+  };
+};

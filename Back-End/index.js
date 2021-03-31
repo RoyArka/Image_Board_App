@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/admin", (req, res) => {
-  res.sendFile(__dirname + "/admin.html")
+  res.sendFile(__dirname + "../Front-End/admin.html")
 });
 
 app.get(endPointRoot, (req, res) => {
