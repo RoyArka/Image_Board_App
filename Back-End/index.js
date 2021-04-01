@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Back-End"));
 
 // functions alphabetized
-app.delete(`${endPointRoot}/post/:postid`, (req, res) => {
+app.delete(`${endPointRoot}/post`, (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
@@ -22,7 +22,7 @@ app.delete(`${endPointRoot}/post/:postid`, (req, res) => {
   res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
 });
 
-app.delete(`${endPointRoot}/location/:location`, (req, res) => {
+app.delete(`${endPointRoot}/location`, (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
