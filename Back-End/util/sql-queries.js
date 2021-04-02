@@ -12,7 +12,7 @@ const localDB = {
   host: "localhost",
   user: "admin",
   password: "Initial1",
-  database: "COMP4537Asgn1",
+  database: "COMP4537TermProject",
 };
 
 const db = mysql.createPool({
@@ -23,8 +23,8 @@ const db = mysql.createPool({
   connectionLimit: 5,
 });
 
-const deleteRowFromTable = (id) => {
-  const query = `DELETE FROM QUOTES WHERE ID = ${id}`;
+const deleteRowFromTable = (id, tableName) => {
+  const query = `DELETE FROM ${tableName} WHERE ID = ${id}`;
   db.query(query, (err, res) => {
     if (err) throw err;
     console.log(res);
