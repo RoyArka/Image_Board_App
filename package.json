@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon Front-End/index.js",
     "front": "nodemon Front-End/index.js",
-    "back": "nodemon Back-End/index.js"
+    "back": "nodemon Back-End/app.js"
   },
   "repository": {
     "type": "git",
