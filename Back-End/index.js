@@ -10,7 +10,7 @@ const {
   deleteLocationByName,
   selectAllFromLocation,
 } = locationSQL;
-const { incrementEndpointStats } = statisticsSQL;
+const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
 const app = express();
 const endPointRoot = "/4537/termproject/API/V1";
 const port = process.env.PORT || 3000;
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Back-End"));
 
 // functions alphabetized
-app.delete(`${endPointRoot}/post`, (req, res) => {
+app.delete(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
@@ -29,23 +29,28 @@ app.delete(`${endPointRoot}/post`, (req, res) => {
   res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
 });
 
-app.delete(`${endPointRoot}/location`, (req, res) => {
+app.delete(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
   const location = req.query.location;
+  await incrementEndpointStats(`${endPointRoot}/location`, requestType.DELETE);
   res
     .status(statusCode.OK)
     .end(`Successfully deleted location with name ${location}`);
 });
 
-app.get(`${endPointRoot}/location/:location`, (req, res) => {
+app.get(`${endPointRoot}/location/:location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
   const location = req.query.location;
+  await incrementEndpointStats(
+    `${endPointRoot}/location/:location`,
+    requestType.GET,
+  );
   res
     .status(statusCode.OK)
     .end(`Successfully fetched all posts for location ${location}`);
@@ -57,12 +62,22 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
+
   const selectAllResponse = await selectAllFromLocation();
-  const incrementEndPointResponse = await incrementEndpointStats(
-    `${endPointRoot}/location`,
-    requestType.GET,
-  );
-  console.log("INCREMENT RESPONSE", incrementEndPointResponse);
+  await incrementEndpointStats(`${endPointRoot}/location`, requestType.GET);
+
+  res.end(JSON.stringify(selectAllResponse));
+});
+
+app.get(`${endPointRoot}/stats`, async (req, res) => {
+  res.writeHead(statusCode.OK, {
+    "Content-Type": "text/html",
+    "Access-Control-Allow-Origin": "*",
+  });
+
+  const selectAllResponse = await selectAllFromStats();
+  await incrementEndpointStats(`${endPointRoot}/stats`, requestType.GET);
+
   res.end(JSON.stringify(selectAllResponse));
 });
 
@@ -81,37 +96,41 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
   });
 
   const createLocationResponse = await createLocation(req.body.location);
+  await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
   console.log(createLocationResponse);
   res
     .status(statusCode.CREATED)
     .end(`Successfully Created Location Record: ${req.body.location}`);
 });
 
-app.post(`${endPointRoot}/post`, (req, res) => {
+app.post(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
   const location = req.query.location;
+  await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
   res
     .status(statusCode.CREATED)
     .end(`Successful Post creation for location ${location}`);
 });
 
-app.put(`${endPointRoot}/user`, (req, res) => {
+app.put(`${endPointRoot}/user`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
+  await incrementEndpointStats(`${endPointRoot}/user`, requestType.PUT);
   res.status(statusCode.OK).end("Successfully updated username");
 });
 
-app.put(`${endPointRoot}/post`, (req, res) => {
+app.put(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
   const postid = req.query.postid;
+  await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
   res.status(statusCode.OK).end(`Successfully updated post with id ${postid}`);
 });
 

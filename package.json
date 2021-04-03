@@ -5,8 +5,8 @@
   "main": "Front-End/index.js",
   "scripts": {
     "start": "nodemon Front-End/index.js",
-    "dev-front": "nodemon Front-End/index.js",
-    "dev-back": "nodemon Back-End/index.js"
+    "front": "nodemon Front-End/index.js",
+    "back": "nodemon Back-End/index.js"
   },
   "repository": {
     "type": "git",
