@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 //Home Page functions
 const xhttp = new XMLHttpRequest();
 const DELETE = "DELETE";
@@ -121,16 +122,4 @@ const locationGet = () => {
       });
     }
   };
-};
-
-module.exports = {
-  createLocation,
-  createDiv,
-  createLocTitle,
-  createCapTitle,
-  createCapInput,
-  createImgTitle,
-  createImgInput,
-  createPostButton,
-  createDeleteButton,
 };

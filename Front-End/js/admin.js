@@ -1,5 +1,5 @@
-// module declarations alphabetized
-const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1/"
+/* eslint-disable no-unused-vars */
+const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1";
 const endPointRoot = "4537/termproject/API/V1";
 const GET = "GET";
 const xhttp = new XMLHttpRequest();
@@ -39,8 +39,4 @@ const formatStatisticsResult = (result) => {
   });
   formattedResult += "</table>";
   return formattedResult;
-};
-
-module.export = {
-  statsGet,
 };
