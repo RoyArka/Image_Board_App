@@ -74,47 +74,16 @@ const createDeleteButton = (inputLocation) => {
 const createLocation = (isOwner, myLocation, myCaption) => {
   //root location for appending locations
   const root = document.getElementById("rootLocations");
-
   //Grabing location from input
   const inputLocation = document.getElementById("inputLocation").value;
-
   //div creation for location block
   const div = createDiv(inputLocation);
-
   //Location title
   const locTitle = createLocTitle(inputLocation);
-
-  //Caption title
-  const capTitle = createCapTitle();
-
-  //Caption input
-  const captionInput = createCapInput(inputLocation, myCaption);
-
-  //Image title
-  const imgTitle = createImgTitle();
-
-  //Image input
-  const imgInput = createImgInput(inputLocation);
-
-  //Post Button to create post
-  const postButton = createPostButton(inputLocation);
-
-  //Delete Location Button
-  const deleteButton = createDeleteButton(inputLocation);
   //appending elements
   root.appendChild(div);
   div.appendChild(document.createElement("br"));
   div.appendChild(locTitle);
-  div.appendChild(capTitle);
-  div.appendChild(captionInput);
-  div.appendChild(document.createElement("br"));
-  div.appendChild(imgTitle);
-  div.appendChild(imgInput);
-  div.appendChild(document.createElement("br"));
-  div.appendChild(document.createElement("br"));
-  div.appendChild(postButton);
-  div.appendChild(deleteButton);
-
   //Call POST function
   locationPost();
 };
@@ -122,7 +91,6 @@ const createLocation = (isOwner, myLocation, myCaption) => {
 //AJAX Location POST
 const locationPost = () => {
   const locationValue = document.getElementById("inputLocation").value;
-  console.log(locationValue);
   const data = JSON.stringify({
     location: locationValue,
   });
@@ -134,7 +102,6 @@ const locationPost = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       console.log(this.responseText);
-      createLocTitle(locationValue);
     }
   };
 };

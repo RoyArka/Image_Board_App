@@ -4,7 +4,6 @@ const endPointRoot = "4537/termproject/API/V1/";
 const GET = "GET";
 const xhttp = new XMLHttpRequest();
 
-
 //AJAX Stats GET
 const statsGet = () => {
   xhttp.open(GET, `${endPointRoot}/stats`, true);
