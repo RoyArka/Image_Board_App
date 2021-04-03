@@ -10,7 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Front-End"));
 app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
-app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/documentation.html",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument),
+);
 
 //home page
 app.get("/", (req, res) => {
