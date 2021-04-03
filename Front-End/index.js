@@ -36,3 +36,7 @@ app.get("/doc", (req, res) => {
 app.get("/logout", (req, res) => {
   res.sendFile(__dirname + "/login.html");
 });
+
+app.listen(port, () => {
+  console.log("Connected! Waiting for request on port", port);
+});
