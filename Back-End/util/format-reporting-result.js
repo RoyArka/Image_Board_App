@@ -10,7 +10,7 @@ const formatLocations = (result) => {
   return formattedResult;
 };
 
-const formatReportingResult = (result) => {
+const formatStatisticsResult = (result) => {
   let formattedResult = "<table>";
   formattedResult +=
     "<tr><th>Method</th> <th>EndPoint</th> <th>Requests</th></tr>";
@@ -26,5 +26,5 @@ const formatReportingResult = (result) => {
 
 module.exports = {
   formatLocations,
-  formatReportingResult,
+  formatStatisticsResult,
 };

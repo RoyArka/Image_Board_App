@@ -1,13 +1,16 @@
 const express = require("express");
 
 const locationSQL = require("./sql/location-queries");
+const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
+const requestType = require("./http/request-types");
 
 const {
   createLocation,
   deleteLocationByName,
   selectAllFromLocation,
 } = locationSQL;
+const { incrementEndpointStats } = statisticsSQL;
 const app = express();
 const endPointRoot = "/4537/termproject/API/V1";
 const port = process.env.PORT || 3000;
@@ -55,6 +58,11 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
     "Access-Control-Allow-Origin": "*",
   });
   const selectAllResponse = await selectAllFromLocation();
+  const incrementEndPointResponse = await incrementEndpointStats(
+    `${endPointRoot}/location`,
+    requestType.GET,
+  );
+  console.log("INCREMENT RESPONSE", incrementEndPointResponse);
   res.end(JSON.stringify(selectAllResponse));
 });
 

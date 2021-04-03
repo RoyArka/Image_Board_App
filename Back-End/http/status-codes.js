@@ -19,4 +19,4 @@ module.exports = {
   FORBIDDEN,
   NOT_FOUND,
   METHOD_NOT_ALLOWED,
-}
+};
