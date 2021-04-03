@@ -3,28 +3,43 @@
 <meta charset="UTF-8">
 <title>COMP4537 Term Project</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="js/admin.js"></script>
+
 <body>
+  <!--Navbar on Homepage-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">
+      <span id="nav-logo">&#128247;</span>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="/">Locations</a>
+        <a class="nav-item nav-link active" href="profile">Profile</a>
+        <a class="nav-item nav-link active" href="documentation">API Documentation</a>
+        <a class="nav-item nav-link active" href="stats">Stats Report</a>
+        <a class="nav-item nav-link active" href="logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+  <br>
 
-<div class="text-center">
-  <h1>COMP4537 Term Project</h1>
-  <p>Grabs all posts for location: GET Request "API/V1/location"</p>
-  <button class="active btn btn-primary btn-lg" role="button" onclick="locationGet()">GET Request</button>
-  <br>
-  <p>GET Success counter: </p>
-  <h4 id="res1"></h4>
-  <h4 id="res1-text"></h4>
-  <br>
-  <p>Login/Registration: POST Request "API/V1/login"</p>
-  <button class="active btn btn-primary btn-lg" role="button" onclick="loginPost()">POST Request</button>
-  <br>
-  <p>POST Success counter: </p>
-  <h4 id="res2"></h4>
-  <h4 id="res2-text"></h4>
-  <br>
-  <a class="active btn btn-primary btn-lg" href="/">Back</a>
-</div>
+  <div class="text-center">
+    <a class="active btn btn-primary btn-lg" href="/">Back</a>
+  </div>
 
+  <!--JS for Bootstrap-->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
