@@ -134,7 +134,7 @@ const locationPost = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       console.log(this.responseText);
-      //TODO: needs to implemented
+      createLocTitle(locationValue);
     }
   };
 };
@@ -145,28 +145,15 @@ const locationGet = () => {
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      const rootLocations = document.getElementById("rootLocations").value;
+      const rootLocations = document.getElementById("rootLocations");
       const locationsResponse = JSON.parse(this.response);
 
-      console.log(locationsResponse);
-      rootLocations.innerHTML(formatLocations(locationsResponse));
-      //TODO: needs to implemented
-      //maybe call a function that loads the locations
+      locationsResponse.forEach((location) => {
+        const locTitle = createLocTitle(location.name);
+        rootLocations.appendChild(locTitle);
+      });
     }
   };
-};
-
-const formatLocations = (result) => {
-  const table = document.createElement("table");
-  let formattedResult = "<table>";
-  formattedResult += "<tr><th>Name</th></tr>";
-  result.forEach((row) => {
-    formattedResult += "<tr>";
-    formattedResult += `<td>${row.Name}</td>`;
-    formattedResult += "</tr>";
-  });
-  formattedResult += "</table>";
-  return formattedResult;
 };
 
 module.exports = {
