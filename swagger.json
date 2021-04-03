@@ -85,7 +85,7 @@
         "deprecated": false,
         "description": "",
         "externalDocs": {},
-        "operationId": "",
+        "operationId": "deleteLocationByName",
         "parameters": [],
         "produces":[],
         "responses": {
@@ -107,7 +107,7 @@
         "deprecated": false,
         "description": "",
         "externalDocs": {},
-        "operationId": "",
+        "operationId": "selectAllFromLocation",
         "parameters": [],
         "produces":[],
         "responses": {
@@ -125,25 +125,32 @@
         "tags": ["location"]
       },
       "post": {
-        "consumes": [],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
         "deprecated": false,
-        "description": "",
-        "externalDocs": {},
-        "operationId": "",
-        "parameters": [],
-        "produces":[],
+        "description": "Create a location",
+        "operationId": "createLocationByName",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "body",
+            "description": "Name of location to create",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "produces":["text/html"],
         "responses": {
           "201": {
-            "description": "",
-            "$ref": "",
-            "examples": {},
-            "headers": {},
-            "schema": {}
+            "description": "The request has succeeded and a new resource has been created"
           }
         },
         "security": [],
         "schemes": [],
-        "summary": "",
+        "summary": "Create a location",
         "tags": ["location"]
       },
       "put": {

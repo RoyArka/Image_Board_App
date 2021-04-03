@@ -16,9 +16,9 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Back-End"));
+// app.use(express.static("./"));
 app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// functions alphabetized
 app.delete(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
