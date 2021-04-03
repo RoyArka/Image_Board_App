@@ -1,6 +1,6 @@
 // module declarations alphabetized
 const DELETE = "DELETE";
-const hostedEndPoint = "https://michealozdoba.com/4537/termproject/API/V1/"
+const hostedEndPoint = "https://michealozdoba.com/4537/termproject/API/V1/";
 const endPointRoot = "4537/termproject/API/V1/";
 const GET = "GET";
 const POST = "POST";
@@ -62,12 +62,11 @@ const updateImage = (id) => {
   };
 };
 
-
 let counterPOST = 0;
-//login POST request function 
+//login POST request function
 loginPost = () => {
   console.log("POST Request Sent!");
-  xhttp.open(POST, hostedEndPoint + "login", true)
+  xhttp.open(POST, hostedEndPoint + "login", true);
   xhttp.send("new user");
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 201) {
@@ -81,7 +80,7 @@ loginPost = () => {
 }
 
 let counterGET = 0;
-//location GET request function 
+//location GET request function
 locationGet = () => {
   console.log("GET Request Sent!");
   xhttp.open(GET, hostedEndPoint + "location", true);
