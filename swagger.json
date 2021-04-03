@@ -105,18 +105,14 @@
       "get": {
         "consumes": [],
         "deprecated": false,
-        "description": "",
+        "description": "Returns all locations",
         "externalDocs": {},
         "operationId": "selectAllFromLocation",
         "parameters": [],
-        "produces":[],
+        "produces":["text/html"],
         "responses": {
-          "201": {
-            "description": "",
-            "$ref": "",
-            "examples": {},
-            "headers": {},
-            "schema": {}
+          "200": {
+            "description": "Successful Response"
           }
         },
         "security": [],
@@ -183,8 +179,30 @@
         "summary": "",
         "tags": ["location"]
       }
+    },
+    "/stats": {
+      "get": {
+        "consumes": [],
+        "deprecated": false,
+        "description": "Returns number of requests served for all endpoints",
+        "externalDocs": {},
+        "operationId": "",
+        "parameters": [],
+        "produces":["text/html"],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "examples": {}
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "",
+        "tags": ["stats"]
+      }
     }
   },
+
   "parameters": {},
   "produces":[],
   "responses": {},
@@ -223,7 +241,7 @@
         "url": ""
       },
       "name": "stats",
-      "description": ""
+      "description": "Stats for each existing endpoint"
     },
     {
       "externalDocs": {
