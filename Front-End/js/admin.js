@@ -22,7 +22,6 @@ const statsGet = () => {
   const rootStats = document.getElementById("rootStats");
   // const statsResponse = JSON.parse(this.response);
   const statsResponseTest = JSON.parse(testData);
-
   rootStats.innerHTML = formatStatisticsResult(statsResponseTest);
 };
 
@@ -39,8 +38,4 @@ const formatStatisticsResult = (result) => {
   });
   formattedResult += "</table>";
   return formattedResult;
-};
-
-module.export = {
-  statsGet,
 };
