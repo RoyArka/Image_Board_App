@@ -1,3 +1,9 @@
 #nav-logo {
     font-size: 30px;
 }
+
+table {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
