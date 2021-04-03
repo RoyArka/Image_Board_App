@@ -122,15 +122,3 @@ const locationGet = () => {
     }
   };
 };
-
-module.exports = {
-  createLocation,
-  createDiv,
-  createLocTitle,
-  createCapTitle,
-  createCapInput,
-  createImgTitle,
-  createImgInput,
-  createPostButton,
-  createDeleteButton,
-};
