@@ -135,8 +135,10 @@
             "description": "Name of location to create",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "Kelowna"
+              "type": "object",
+              "example": {
+                "location": "Kelowna"
+              }
             }
           }
         ],
