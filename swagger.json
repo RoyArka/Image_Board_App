@@ -1,5 +1,5 @@
 {
-  "basePath": "4537/termproject/api/v1",
+  "basePath": "/4537/termproject/api/v1",
   "consumes":[],
   "definitions": {
     "location":{
@@ -68,7 +68,7 @@
     }
   },
   "externalDocs": {},
-  "host": "https://michealozdoba.com",
+  "host": "michealozdoba.com",
   "info": {
     "version": "1.0.0",
     "title": "COMP4537 Term Project API",
@@ -126,7 +126,8 @@
       },
       "post": {
         "consumes": [
-          "application/x-www-form-urlencoded"
+          "application/x-www-form-urlencoded",
+          "text/html"
         ],
         "deprecated": false,
         "description": "Create a location",
@@ -139,7 +140,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "Toronto"
+              "example": {
+                "location": "Toronto"
+              }
             }
           }
         ],
