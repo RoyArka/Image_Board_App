@@ -1,5 +1,5 @@
 {
-  "basePath": "/4537/termproject/api/v1",
+  "basePath": "/4537/termproject/API/V1",
   "consumes":[],
   "definitions": {
     "location":{
@@ -136,9 +136,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": {
-                "location": "Toronto"
-              }
+              "example": "Kelowna"
             }
           }
         ],
@@ -185,7 +183,6 @@
         "consumes": [],
         "deprecated": false,
         "description": "Returns number of requests served for all endpoints",
-        "externalDocs": {},
         "operationId": "",
         "parameters": [],
         "produces":["text/html"],
