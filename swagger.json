@@ -117,7 +117,7 @@
         },
         "security": [],
         "schemes": [],
-        "summary": "",
+        "summary": "Return a list of all locations",
         "tags": ["location"]
       },
       "post": {
@@ -197,7 +197,7 @@
         },
         "security": [],
         "schemes": [],
-        "summary": "",
+        "summary": "Returns a list of request method and endpoint pairs with corresponding number of time each endpoint was hit",
         "tags": ["stats"]
       }
     }
