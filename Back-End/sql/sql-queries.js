@@ -1,27 +1,5 @@
-const mysql = require("mysql");
-const formatResult = require("./example-util");
-
-// const remoteDB = {
-//   host: "localhost",
-//   user: "michealo_admin",
-//   password: "Initial1",
-//   database: "michealo_COMP4537Asgn1",
-// };
-
-const localDB = {
-  host: "localhost",
-  user: "admin",
-  password: "Initial1",
-  database: "COMP4537TermProject",
-};
-
-const db = mysql.createPool({
-  host: localDB.host,
-  user: localDB.user,
-  password: localDB.password,
-  database: localDB.database,
-  connectionLimit: 5,
-});
+const db = require("./db-connection");
+const formatResult = require("../util/format-reporting-result");
 
 const deleteRowFromTable = (id, tableName) => {
   const query = `DELETE FROM ${tableName} WHERE ID = ${id}`;
