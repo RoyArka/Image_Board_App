@@ -1,0 +1,12 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "COMP4537 Term Project API",
+    "description": "Open API Specifications for COMP4537 Term Project",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  }
+}

@@ -1,8 +1,10 @@
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
 
 const locationSQL = require("./sql/location-queries");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
+const swaggerDocument = require("../swagger.json");
 const requestType = require("./http/request-types");
 
 const {
@@ -18,17 +20,9 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Back-End"));
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // functions alphabetized
-app.delete(`${endPointRoot}/post`, async (req, res) => {
-  res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
-  });
-  const postId = req.query.id;
-  res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
-});
-
 app.delete(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
@@ -39,6 +33,15 @@ app.delete(`${endPointRoot}/location`, async (req, res) => {
   res
     .status(statusCode.OK)
     .end(`Successfully deleted location with name ${location}`);
+});
+
+app.delete(`${endPointRoot}/post`, async (req, res) => {
+  res.writeHead(statusCode.OK, {
+    "Content-Type": "text/html",
+    "Access-Control-Allow-Origin": "*",
+  });
+  const postId = req.query.id;
+  res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
 });
 
 app.get(`${endPointRoot}/location/:location`, async (req, res) => {
