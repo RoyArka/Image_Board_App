@@ -1,4 +1,11 @@
-//home page functions
+//Home Page functions
+const xhttp = new XMLHttpRequest();
+const DELETE = "DELETE";
+const GET = "GET";
+const POST = "POST";
+const PUT = "PUT";
+const UPDATE = "UPDATE";
+const endPointRoot = "/4537/termproject/API/V1";
 
 //Creates Div for locations
 const createDiv = (inputLocation) => {
@@ -64,13 +71,12 @@ const createDeleteButton = (inputLocation) => {
 };
 
 //Creates Location Block
-const createLocation = (isOwner, myCaption) => {
+const createLocation = (isOwner, myLocation, myCaption) => {
   //root location for appending locations
   const root = document.getElementById("rootLocations");
 
   //Grabing location from input
   const inputLocation = document.getElementById("inputLocation").value;
-  console.log("value: " + inputLocation);
 
   //div creation for location block
   const div = createDiv(inputLocation);
@@ -108,6 +114,42 @@ const createLocation = (isOwner, myCaption) => {
   div.appendChild(document.createElement("br"));
   div.appendChild(postButton);
   div.appendChild(deleteButton);
+
+  //Call POST function
+  locationPost();
+};
+
+//AJAX Location POST
+const locationPost = () => {
+  const locationValue = document.getElementById("inputLocation").value;
+  console.log(locationValue);
+  const data = JSON.stringify({
+    location: locationValue,
+  });
+
+  xhttp.open(POST, `${endPointRoot}/location`, true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(data);
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      //TODO: needs to implemented
+    }
+  };
+};
+
+//AJAX Location GET
+const locationGet = () => {
+  xhttp.open(GET, `${endPointRoot}/location`, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      //TODO: needs to implemented
+      //maybe call a function that loads the locations
+    }
+  };
 };
 
 module.exports = {
