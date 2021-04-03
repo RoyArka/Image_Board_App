@@ -7,11 +7,7 @@ const statusCode = require("./http/status-codes");
 const swaggerDocument = require("../swagger.json");
 const requestType = require("./http/request-types");
 
-const {
-  createLocation,
-  deleteLocationByName,
-  selectAllFromLocation,
-} = locationSQL;
+const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
 const app = express();
 const endPointRoot = "/4537/termproject/API/V1";
@@ -60,13 +56,13 @@ app.get(`${endPointRoot}/location/:location`, async (req, res) => {
 });
 
 app.get(`${endPointRoot}/location`, async (req, res) => {
-  console.log("LOCATION", req.body);
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",
   });
 
   const selectAllResponse = await selectAllFromLocation();
+  console.log(selectAllResponse);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.GET);
 
   res.end(JSON.stringify(selectAllResponse));
