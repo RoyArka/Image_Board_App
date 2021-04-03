@@ -1,5 +1,13 @@
 {
-  "swagger": "2.0",
+  "basePath": "4537/termproject/api/v1",
+  "consumes":[],
+  "definitions": {
+    "id": {
+
+    }
+  },
+  "externalDocs": {},
+  "host": "https://michealozdoba.com",
   "info": {
     "version": "1.0.0",
     "title": "COMP4537 Term Project API",
@@ -8,5 +16,146 @@
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
-  }
+  },
+  "paths": {
+    "/location": {
+      "delete": {
+        "consumes": [],
+        "deprecated": false,
+        "description": "",
+        "externalDocs": {},
+        "operationId": "",
+        "parameters": [],
+        "produces":[],
+        "responses": {
+          "201": {
+            "description": "",
+            "$ref": "",
+            "examples": {},
+            "headers": {},
+            "schema": {}
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "",
+        "tags": ["location"]
+      },
+      "get": {
+        "consumes": [],
+        "deprecated": false,
+        "description": "",
+        "externalDocs": {},
+        "operationId": "",
+        "parameters": [],
+        "produces":[],
+        "responses": {
+          "201": {
+            "description": "",
+            "$ref": "",
+            "examples": {},
+            "headers": {},
+            "schema": {}
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "",
+        "tags": ["location"]
+      },
+      "post": {
+        "consumes": [],
+        "deprecated": false,
+        "description": "",
+        "externalDocs": {},
+        "operationId": "",
+        "parameters": [],
+        "produces":[],
+        "responses": {
+          "201": {
+            "description": "",
+            "$ref": "",
+            "examples": {},
+            "headers": {},
+            "schema": {}
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "",
+        "tags": ["location"]
+      },
+      "put": {
+        "consumes": [],
+        "deprecated": false,
+        "description": "",
+        "externalDocs": {},
+        "operationId": "",
+        "parameters": [],
+        "produces":[],
+        "responses": {
+          "201": {
+            "description": "",
+            "$ref": "",
+            "examples": {},
+            "headers": {},
+            "schema": {}
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "",
+        "tags": ["location"]
+      }
+    }
+  },
+  "parameters": {},
+  "produces":[],
+  "responses": {},
+  "schemes": ["https"],
+  "security": [],
+  "securityDefinitions": {},
+  "swagger": "2.0",
+  "tags":[
+    {
+      "externalDocs": {
+        "description": "",
+        "url": ""
+      },
+      "name": "location",
+      "description": ""
+    },
+    {
+      "externalDocs": {
+        "description": "",
+        "url": ""
+      },
+      "name": "login",
+      "description": ""
+    },
+    {
+      "externalDocs": {
+        "description": "",
+        "url": ""
+      },
+      "name": "post",
+      "description": ""
+    },
+    {
+      "externalDocs": {
+        "description": "",
+        "url": ""
+      },
+      "name": "stats",
+      "description": ""
+    },
+    {
+      "externalDocs": {
+        "description": "",
+        "url": ""
+      },
+      "name": "user",
+      "description": ""
+    }
+  ]
 }
