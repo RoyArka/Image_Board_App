@@ -1,7 +1,7 @@
-//express server for front-end routing
-
-//library imports first
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+
+const swaggerDocument = require("../swagger.json");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -10,6 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Front-End"));
 app.use("/css", express.static(__dirname + "/css"));
 app.use("/js", express.static(__dirname + "/js"));
+app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //home page
 app.get("/", (req, res) => {
