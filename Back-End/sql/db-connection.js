@@ -12,7 +12,7 @@ const remoteDB = {
 const localDB = {
   host: "localhost",
   user: "admin",
-  password: "Initial1",
+  password: password,
   database: "COMP4537TermProject",
 };
 
