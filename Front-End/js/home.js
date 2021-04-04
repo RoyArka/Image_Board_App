@@ -7,6 +7,7 @@ const POST = "POST";
 const PUT = "PUT";
 const UPDATE = "UPDATE";
 const endPointRoot = "/4537/termproject/API/V1";
+const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1";
 
 //Creates Div for locations
 const createDiv = (inputLocation) => {
@@ -81,10 +82,9 @@ const createLocation = (isOwner, myLocation, myCaption) => {
   const div = createDiv(inputLocation);
   //Location title
   const locTitle = createLocTitle(inputLocation);
+
   //appending elements
-  root.appendChild(div);
-  div.appendChild(document.createElement("br"));
-  div.appendChild(locTitle);
+  root.appendChild(locTitle);
   //Call POST function
   locationPost();
 };
@@ -96,8 +96,9 @@ const locationPost = () => {
     location: locationValue,
   });
 
-  xhttp.open(POST, `${endPointRoot}/location`, true);
-  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.open(POST, `${hostedEndPointRoot}/location`, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("Accept", "text/html");
   xhttp.send(data);
 
   xhttp.onreadystatechange = function () {
@@ -109,7 +110,7 @@ const locationPost = () => {
 
 //AJAX Location GET
 const locationGet = () => {
-  xhttp.open(GET, `${endPointRoot}/location`, true);
+  xhttp.open(GET, `${hostedEndPointRoot}/location`, true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
