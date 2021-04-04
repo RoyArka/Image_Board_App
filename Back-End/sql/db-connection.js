@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const password = process.env.DB_KEY;
+
 // eslint-disable-next-line no-unused-vars
 const remoteDB = {
   host: "localhost",
@@ -11,7 +12,7 @@ const remoteDB = {
 const localDB = {
   host: "localhost",
   user: "admin",
-  password: password,
+  password: "Initial1",
   database: "COMP4537TermProject",
 };
 

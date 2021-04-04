@@ -117,7 +117,7 @@ const locationGet = () => {
       const locationsResponse = JSON.parse(this.response);
 
       locationsResponse.forEach((location) => {
-        const locTitle = createLocTitle(location.name);
+        const locTitle = createLocTitle(location.Name);
         rootLocations.appendChild(locTitle);
       });
     }

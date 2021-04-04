@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 
@@ -10,9 +11,11 @@ const requestType = require("./http/request-types");
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
 const app = express();
+const crossOrigin = "https://comp4537-project.herokuapp.com";
 const endPointRoot = "/4537/termproject/API/V1";
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Back-End"));
@@ -22,7 +25,7 @@ app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.delete(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   const location = req.query.location;
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.DELETE);
@@ -34,7 +37,7 @@ app.delete(`${endPointRoot}/location`, async (req, res) => {
 app.delete(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   const postId = req.query.id;
   res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
@@ -43,7 +46,7 @@ app.delete(`${endPointRoot}/post`, async (req, res) => {
 app.get(`${endPointRoot}/location/:location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   const location = req.query.location;
   await incrementEndpointStats(
@@ -58,7 +61,7 @@ app.get(`${endPointRoot}/location/:location`, async (req, res) => {
 app.get(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
 
   const selectAllResponse = await selectAllFromLocation();
@@ -71,7 +74,7 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
 app.get(`${endPointRoot}/stats`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
 
   const selectAllResponse = await selectAllFromStats();
@@ -83,17 +86,17 @@ app.get(`${endPointRoot}/stats`, async (req, res) => {
 app.post(`${endPointRoot}/login`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.CREATED).end("Successful Login/Register");
 });
 
 app.post(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
-    "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": crossOrigin,
+    "Access-Control-Allow-Methods": "POST",
   });
-
   const createLocationResponse = await createLocation(req.body.location);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
   console.log(createLocationResponse);
@@ -105,7 +108,7 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 app.post(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   const location = req.query.location;
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
@@ -117,7 +120,7 @@ app.post(`${endPointRoot}/post`, async (req, res) => {
 app.put(`${endPointRoot}/user`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   await incrementEndpointStats(`${endPointRoot}/user`, requestType.PUT);
   res.status(statusCode.OK).end("Successfully updated username");
@@ -126,7 +129,7 @@ app.put(`${endPointRoot}/user`, async (req, res) => {
 app.put(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": crossOrigin,
   });
   const postid = req.query.postid;
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
