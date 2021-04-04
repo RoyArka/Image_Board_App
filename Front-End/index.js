@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 //profile page
-app.get("/profle", (req, res) => {
+app.get("/profile", (req, res) => {
   res.sendFile(__dirname + "/profile.html");
 });
 
