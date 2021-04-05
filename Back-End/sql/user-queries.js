@@ -1,13 +1,56 @@
-const db = require("./db-connection");
+const connection = require("./db-connection");
 
 const update = ({ id, quote, author }) => {
   const query = `UPDATE QUOTES SET QUOTE = "${quote}", AUTHOR = "${author}" WHERE ID = ${id}`;
-  db.query(query, (err, res) => {
-    if (err) throw err;
-    console.log(res);
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const getUserById = (id) => {
+  const query = `
+    SELECT Username, Password, DateJoined, Admin
+    FROM User
+    WHERE ID = ${id}
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const registerUser = ({ dateJoined, isAdmin, password, username }) => {
+  const query = `
+    INSERT INTO User(Username, Password, DateJoined, Admin)
+    VALUES ('${username}', '${password}', ${dateJoined}, ${isAdmin})
+  `;
+
+  const ERROR_DUPLICATE_ENTRY = "ER_DUP_ENTRY";
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        if (err.code === ERROR_DUPLICATE_ENTRY) resolve(err);
+        reject(err);
+      }
+      resolve(result);
+    });
   });
 };
 
 module.exports = {
+  getUserById,
+  registerUser,
   update,
 };

@@ -1,5 +1,6 @@
 const mysql = require("mysql");
-const password = process.env.DB_KEY;
+const config = require("../../config");
+const password = config.DB_KEY;
 
 // eslint-disable-next-line no-unused-vars
 const remoteDB = {

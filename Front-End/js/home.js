@@ -5,7 +5,6 @@ const DELETE = "DELETE";
 const GET = "GET";
 const POST = "POST";
 const PUT = "PUT";
-const UPDATE = "UPDATE";
 const endPointRoot = "/4537/termproject/API/V1";
 const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1";
 

@@ -7,9 +7,11 @@ const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
 const swaggerDocument = require("../swagger.json");
 const requestType = require("./http/request-types");
+const userSQL = require("./sql/user-queries");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
+const { getUserById, registerUser } = userSQL;
 const app = express();
 const crossOrigin = "https://comp4537-project.herokuapp.com";
 const endPointRoot = "/4537/termproject/API/V1";
@@ -73,7 +75,7 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
 
 app.get(`${endPointRoot}/stats`, async (req, res) => {
   res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": crossOrigin,
   });
 
@@ -83,9 +85,20 @@ app.get(`${endPointRoot}/stats`, async (req, res) => {
   res.end(JSON.stringify(selectAllResponse));
 });
 
+app.get(`${endPointRoot}/user/:id`, async (req, res) => {
+  res.writeHead(statusCode.OK, {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": crossOrigin,
+  });
+  const getUserByIdResponse = await getUserById(req.params.id);
+  await incrementEndpointStats(`${endPointRoot}/user/:id`, requestType.GET);
+
+  res.end(JSON.stringify(getUserByIdResponse));
+});
+
 app.post(`${endPointRoot}/login`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.CREATED).end("Successful Login/Register");
@@ -95,26 +108,41 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": crossOrigin,
-    "Access-Control-Allow-Methods": "POST",
   });
   const createLocationResponse = await createLocation(req.body.location);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
-  console.log(createLocationResponse);
-  res
-    .status(statusCode.CREATED)
-    .end(`Successfully Created Location Record: ${req.body.location}`);
+
+  res.status(statusCode.CREATED).end(JSON.stringify(createLocationResponse));
 });
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": crossOrigin,
   });
-  const location = req.query.location;
-  await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
-  res
-    .status(statusCode.CREATED)
-    .end(`Successful Post creation for location ${location}`);
+
+  const incrementEndpointResponse = await incrementEndpointStats(
+    `${endPointRoot}/post`,
+    requestType.POST,
+  );
+  res.status(statusCode.CREATED).end(JSON.stringify(incrementEndpointResponse));
+});
+
+app.post(`${endPointRoot}/register`, async (req, res) => {
+  res.writeHead(statusCode.CREATED, {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": crossOrigin,
+  });
+  const { isAdmin, password, username } = req.body;
+  const dateJoined = new Date().getTime();
+
+  const registerUserResponse = await registerUser({
+    dateJoined,
+    isAdmin,
+    password,
+    username,
+  });
+  res.status(statusCode.CREATED).end(JSON.stringify(registerUserResponse));
 });
 
 app.put(`${endPointRoot}/user`, async (req, res) => {
