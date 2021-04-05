@@ -76,7 +76,7 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.GET);
 
   res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
   });
   res.end(JSON.stringify(selectAllResponse));
 });
