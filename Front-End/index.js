@@ -31,9 +31,9 @@ app.get("/stats", (req, res) => {
   res.sendFile(__dirname + "/admin.html");
 });
 
-//documentation page
-app.get("/doc", (req, res) => {
-  res.sendFile(__dirname + "/documentation.html");
+//location page
+app.get("/location", (req, res) => {
+  res.sendFile(__dirname + "/location.html");
 });
 
 //logsout to login page
