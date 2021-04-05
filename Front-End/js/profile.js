@@ -8,13 +8,54 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-const createRowUsername = (userName) => {
+const createRowPassword = (password) => {
+  const divHeader = document.getElementById("row-header-password");
+
+  const div = document.createElement("div");
+  div.setAttribute("class", "col-sm-5 text-secondary");
+  div.setAttribute("id", "row-password");
+  div.innerHTML = password;
+
+  const button = document.createElement("button");
+  button.setAttribute("class", "col-sm-2 btn btn-sm btn-outline-primary");
+  button.setAttribute("id", "row-password-btn");
+  button.setAttribute("onclick", "handleChangePassword()");
+  button.innerHTML = "Change";
+
+  divHeader.append(div);
+  divHeader.append(button);
+
+  return divHeader;
+};
+
+const createRowPasswordEditable = () => {
+  const div = document.getElementById("row-header-password");
+
+  const input = document.createElement("input");
+  input.setAttribute("class", "col-sm-5 form-control");
+  input.setAttribute("id", "row-password-input");
+  input.setAttribute("placeholder", "New Password");
+  input.setAttribute("type", "password");
+
+  const button = document.createElement("button");
+  button.setAttribute("class", "col-sm-2 btn btn-sm btn-success");
+  button.setAttribute("id", "row-password-btn-editable");
+  button.setAttribute("onclick", "handleDoneChangePassword()");
+  button.innerHTML = "Done";
+
+  div.append(input);
+  div.append(button);
+
+  return div;
+};
+
+const createRowUsername = (username) => {
   const divHeader = document.getElementById("row-header-username");
 
   const div = document.createElement("div");
   div.setAttribute("class", "col-sm-5 text-secondary");
   div.setAttribute("id", "row-username");
-  div.innerHTML = userName;
+  div.innerHTML = username;
 
   const button = document.createElement("button");
   button.setAttribute("class", "col-sm-2 btn btn-sm btn-outline-primary");
@@ -47,6 +88,25 @@ const createRowUsernameEditable = () => {
   div.append(button);
 
   return div;
+};
+
+const handleDoneChangePassword = () => {
+  const newPassword = document.getElementById("row-password-input").value;
+  let maskedPassword = "";
+  for (let i = 0; i < newPassword.length; i++) {
+    maskedPassword += "*";
+  }
+  document.getElementById("row-password-input").remove();
+  document.getElementById("row-password-btn-editable").remove();
+  updateUserPassword(newPassword);
+  createRowPassword(maskedPassword);
+};
+
+const handleChangePassword = () => {
+  document.getElementById("row-password").remove();
+  document.getElementById("row-password-btn").remove();
+
+  createRowPasswordEditable();
 };
 
 const handleDoneChangeUsername = () => {
