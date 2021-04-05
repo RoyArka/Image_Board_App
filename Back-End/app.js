@@ -10,7 +10,7 @@ const statusCode = require("./http/status-codes");
 const swaggerDocument = require("../swagger.json");
 const requestType = require("./http/request-types");
 const userSQL = require("./sql/user-queries");
-const { hash } = require("bcrypt");
+const writeToImagesDirectory = require("./util/write-to-images-dir");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
@@ -115,6 +115,10 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 });
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
+  const { fileSrc, filename } = req.body;
+
+  writeToImagesDirectory(fileSrc, filename);
+
   const incrementEndpointResponse = await incrementEndpointStats(
     `${endPointRoot}/post`,
     requestType.POST,
@@ -141,7 +145,7 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   );
 
   if (!correctCredentials) {
-    //TODO: incorrect credentials
+    //TODO: handle incorrect credentials
   }
 
   res.writeHead(statusCode.CREATED, {
