@@ -18,12 +18,16 @@ const {
   updatePasswordByUserId,
   updateUsernameByUserId,
 } = userSQL;
+
 const app = express();
 const crossOrigin = "https://comp4537-project.herokuapp.com";
 const endPointRoot = "/4537/termproject/API/V1";
+const corsOptions = {
+  origin: crossOrigin,
+};
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Back-End"));
@@ -36,7 +40,6 @@ app.delete(`${endPointRoot}/location`, async (req, res) => {
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.DELETE);
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res
     .status(statusCode.OK)
@@ -48,7 +51,6 @@ app.delete(`${endPointRoot}/post`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
 });
@@ -62,7 +64,6 @@ app.get(`${endPointRoot}/location/:location`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res
     .status(statusCode.OK)
@@ -76,7 +77,6 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.end(JSON.stringify(selectAllResponse));
 });
@@ -87,7 +87,6 @@ app.get(`${endPointRoot}/stats`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.end(JSON.stringify(selectAllResponse));
 });
@@ -98,7 +97,6 @@ app.get(`${endPointRoot}/user/:id`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.end(JSON.stringify(getUserByIdResponse));
 });
@@ -106,7 +104,6 @@ app.get(`${endPointRoot}/user/:id`, async (req, res) => {
 app.post(`${endPointRoot}/login`, async (req, res) => {
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.CREATED).end("Successful Login/Register");
 });
@@ -117,7 +114,6 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.CREATED).end(JSON.stringify(createLocationResponse));
 });
@@ -130,7 +126,6 @@ app.post(`${endPointRoot}/post`, async (req, res) => {
 
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.CREATED).end(JSON.stringify(incrementEndpointResponse));
 });
@@ -148,7 +143,6 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
 
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.CREATED).end(JSON.stringify(registerUserResponse));
 });
@@ -174,7 +168,6 @@ app.put(`${endPointRoot}/user/:id`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.OK).end(JSON.stringify(updateUserByIdResponse));
 });
@@ -185,7 +178,6 @@ app.put(`${endPointRoot}/post`, async (req, res) => {
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.OK).end(`Successfully updated post with id ${id}`);
 });

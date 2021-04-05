@@ -1,5 +1,5 @@
-const saltRounds = 10; // bcrypt salting requirement
 const bcrypt = require("bcrypt");
+const saltRounds = 10; // bcrypt salting requirement
 
 const comparePasswords = async (password, hash) => {
   bcrypt.compare(password, hash).then((result) => {
