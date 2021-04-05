@@ -6,6 +6,8 @@ const GET = "GET";
 const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1";
 const POST = "POST";
 const PUT = "PUT";
+const HTTP_STATUS_CODE_OK = 200;
+const HTTP_STATUS_CODE_CONFLICT = 409;
 const xhttp = new XMLHttpRequest();
 
 const createRowPassword = (password) => {
@@ -130,7 +132,7 @@ const getProfileById = () => {
   xhttp.open(GET, `${endPointRoot}/user/${id}`, true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
     }
   };
@@ -158,6 +160,17 @@ const updateUserUsername = (username) => {
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
+    // TODO: sucessful username change
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+      const response = JSON.parse(this.response);
+    }
+
+    // TODO: client error (duplicate username) unsuccessful username change
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
+      const response = JSON.parse(this.response);
+    }
+
+    // TODO: server error
     if (this.readyState == 4 && this.status == 200) {
       const response = JSON.parse(this.response);
     }
@@ -174,7 +187,8 @@ const updateUserPassword = (password) => {
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
+    // TODO: successful password change
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
     }
   };
