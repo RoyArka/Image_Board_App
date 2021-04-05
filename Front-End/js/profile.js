@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
+const isProduction = () => {
+  return !document.URL.includes("localhost");
+};
 
 const DELETE = "DELETE";
-const endPointRoot = "4537/termproject/API/V1";
+const endPointRoot = isProduction()
+  ? "https://michealozdoba.com/4537/termproject/API/V1"
+  : "4537/termproject/API/V1";
 const GET = "GET";
-const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1";
+const HTTP_STATUS_CODE_CONFLICT = 409;
+const HTTP_STATUS_CODE_OK = 200;
 const POST = "POST";
 const PUT = "PUT";
-const HTTP_STATUS_CODE_OK = 200;
-const HTTP_STATUS_CODE_CONFLICT = 409;
 const xhttp = new XMLHttpRequest();
 
 const createRowPassword = (password) => {
@@ -98,8 +102,10 @@ const handleDoneChangePassword = () => {
   for (let i = 0; i < newPassword.length; i++) {
     maskedPassword += "*";
   }
+
   document.getElementById("row-password-input").remove();
   document.getElementById("row-password-btn-editable").remove();
+
   updateUserPassword(newPassword);
   createRowPassword(maskedPassword);
 };
@@ -113,8 +119,10 @@ const handleChangePassword = () => {
 
 const handleDoneChangeUsername = () => {
   const newUsername = document.getElementById("row-username-input").value;
+
   document.getElementById("row-username-input").remove();
   document.getElementById("row-username-btn-editable").remove();
+
   updateUserUsername(newUsername);
   createRowUsername(newUsername);
 };
