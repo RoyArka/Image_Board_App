@@ -1,7 +1,11 @@
 const connection = require("./db-connection");
 
-const update = ({ id, quote, author }) => {
-  const query = `UPDATE QUOTES SET QUOTE = "${quote}", AUTHOR = "${author}" WHERE ID = ${id}`;
+const updateUserById = ({ id, password, username }) => {
+  const query = `
+    UPDATE User
+    SET Username = "${username}", Password = "${password}"
+    WHERE ID = ${id}
+  `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {
@@ -52,5 +56,5 @@ const registerUser = ({ dateJoined, isAdmin, password, username }) => {
 module.exports = {
   getUserById,
   registerUser,
-  update,
+  updateUserById,
 };
