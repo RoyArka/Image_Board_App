@@ -51,6 +51,23 @@ const getUserById = (id) => {
   });
 };
 
+const getUserByUsername = (username) => {
+  const query = `
+    SELECT ID, Password, DateJoined, Admin
+    FROM User
+    WHERE Username = '${username}'
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
 const registerUser = ({ dateJoined, isAdmin, password, username }) => {
   const query = `
     INSERT INTO User(Username, Password, DateJoined, Admin)
@@ -72,6 +89,7 @@ const registerUser = ({ dateJoined, isAdmin, password, username }) => {
 
 module.exports = {
   getUserById,
+  getUserByUsername,
   registerUser,
   updatePasswordByUserId,
   updateUsernameByUserId,

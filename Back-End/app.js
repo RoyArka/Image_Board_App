@@ -1,3 +1,4 @@
+const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
@@ -9,11 +10,13 @@ const statusCode = require("./http/status-codes");
 const swaggerDocument = require("../swagger.json");
 const requestType = require("./http/request-types");
 const userSQL = require("./sql/user-queries");
+const { hash } = require("bcrypt");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
 const {
   getUserById,
+  getUserByUsername,
   registerUser,
   updatePasswordByUserId,
   updateUsernameByUserId,
@@ -101,13 +104,6 @@ app.get(`${endPointRoot}/user/:id`, async (req, res) => {
   res.end(JSON.stringify(getUserByIdResponse));
 });
 
-app.post(`${endPointRoot}/login`, async (req, res) => {
-  res.writeHead(statusCode.CREATED, {
-    "Content-Type": "application/json",
-  });
-  res.status(statusCode.CREATED).end("Successful Login/Register");
-});
-
 app.post(`${endPointRoot}/location`, async (req, res) => {
   const createLocationResponse = await createLocation(req.body.location);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
@@ -130,6 +126,30 @@ app.post(`${endPointRoot}/post`, async (req, res) => {
   res.status(statusCode.CREATED).end(JSON.stringify(incrementEndpointResponse));
 });
 
+app.post(`${endPointRoot}/login`, async (req, res) => {
+  const { password, username } = req.body;
+  const getUserByUsernameResponse = await getUserByUsername(username);
+  const userData = getUserByUsernameResponse[0];
+  if (!userData) {
+    // TODO: handle invalid username
+    return;
+  }
+
+  const correctCredentials = await comparePasswords(
+    password,
+    userData.Password,
+  );
+
+  if (!correctCredentials) {
+    //TODO: incorrect credentials
+  }
+
+  res.writeHead(statusCode.CREATED, {
+    "Content-Type": "application/json",
+  });
+  res.status(statusCode.CREATED).end(JSON.stringify(getUserByUsernameResponse));
+});
+
 app.post(`${endPointRoot}/register`, async (req, res) => {
   const { isAdmin, password, username } = req.body;
   const dateJoined = new Date().getTime();
@@ -150,14 +170,14 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
 app.put(`${endPointRoot}/user/:id`, async (req, res) => {
   const { password, username } = req.body;
   const id = req.params.id;
-
   let updateUserByIdResponse;
   if (username) {
     updateUserByIdResponse = await updateUsernameByUserId({
       id,
       username,
     });
-  } else {
+  }
+  if (password) {
     updateUserByIdResponse = await updatePasswordByUserId({
       id,
       password: await hashPassword(password),
