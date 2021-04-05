@@ -11,7 +11,12 @@ const userSQL = require("./sql/user-queries");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
-const { getUserById, registerUser, updateUserById } = userSQL;
+const {
+  getUserById,
+  registerUser,
+  updatePasswordByUserId,
+  updateUsernameByUserId,
+} = userSQL;
 const app = express();
 const crossOrigin = "https://comp4537-project.herokuapp.com";
 const endPointRoot = "/4537/termproject/API/V1";
@@ -146,16 +151,28 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
 });
 
 app.put(`${endPointRoot}/user/:id`, async (req, res) => {
+  const { password, username } = req.body;
+  const id = req.params.id;
+
+  let updateUserByIdResponse;
+  if (username) {
+    updateUserByIdResponse = await updateUsernameByUserId({
+      id,
+      username,
+    });
+  } else {
+    //TODO: hash the password before inserting
+    updateUserByIdResponse = await updatePasswordByUserId({
+      id,
+      password,
+    });
+  }
+  await incrementEndpointStats(`${endPointRoot}/user:id`, requestType.PUT);
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": crossOrigin,
   });
-  const updateUserByIdResponse = await updateUserById({
-    id: req.params.id,
-    password: req.body.password,
-    username: req.body.username,
-  });
-  await incrementEndpointStats(`${endPointRoot}/user:id`, requestType.PUT);
   res.status(statusCode.OK).end(JSON.stringify(updateUserByIdResponse));
 });
 

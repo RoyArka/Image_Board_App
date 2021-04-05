@@ -1,9 +1,26 @@
 const connection = require("./db-connection");
 
-const updateUserById = ({ id, password, username }) => {
+const updateUsernameByUserId = ({ id, username }) => {
   const query = `
     UPDATE User
-    SET Username = "${username}", Password = "${password}"
+    SET Username = "${username}"
+    WHERE ID = ${id}
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const updatePasswordByUserId = ({ id, password }) => {
+  const query = `
+    UPDATE User
+    SET Password = "${password}"
     WHERE ID = ${id}
   `;
   return new Promise((resolve, reject) => {
@@ -56,5 +73,6 @@ const registerUser = ({ dateJoined, isAdmin, password, username }) => {
 module.exports = {
   getUserById,
   registerUser,
-  updateUserById,
+  updatePasswordByUserId,
+  updateUsernameByUserId,
 };

@@ -5,6 +5,7 @@ const endPointRoot = "4537/termproject/API/V1";
 const GET = "GET";
 const hostedEndPointRoot = "https://michealozdoba.com/4537/termproject/API/V1";
 const POST = "POST";
+const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
 const createRowUsername = (userName) => {
@@ -49,10 +50,11 @@ const createRowUsernameEditable = () => {
 };
 
 const handleDoneChangeUsername = () => {
+  const newUsername = document.getElementById("row-username-input").value;
   document.getElementById("row-username-input").remove();
   document.getElementById("row-username-btn-editable").remove();
-
-  createRowUsername("New Username");
+  updateUserUsername(newUsername);
+  createRowUsername(newUsername);
 };
 
 const handleChangeUsername = () => {
@@ -63,14 +65,15 @@ const handleChangeUsername = () => {
 };
 
 //AJAX Stats GET
-const getProfile = () => {
-  // xhttp.open(GET, `${endPointRoot}/user/${id}`, true);
-  // xhttp.send();
-  // xhttp.onreadystatechange = function () {
-  //   if (this.readyState == 4 && this.status == 200) {
-  //     const response = JSON.parse(this.response);
-  //   }
-  // };
+const getProfileById = () => {
+  const id = localStorage.getItem("user-id");
+  xhttp.open(GET, `${endPointRoot}/user/${id}`, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const response = JSON.parse(this.response);
+    }
+  };
 
   const stubbedResponse = `
   [
@@ -82,8 +85,44 @@ const getProfile = () => {
     }
   ]
   `;
-  const response = JSON.parse(stubbedResponse);
-  const { Admin, DateJoined, Password, Username } = response[0];
+  return JSON.parse(stubbedResponse);
+};
+
+const updateUserUsername = (username) => {
+  const id = localStorage.getItem("user-id");
+
+  xhttp.open(PUT, `${endPointRoot}/user/${id}`, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+
+  const payload = { username: username };
+  xhttp.send(JSON.stringify(payload));
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const response = JSON.parse(this.response);
+    }
+  };
+};
+
+const updateUserPassword = (password) => {
+  const id = localStorage.getItem("user-id");
+
+  xhttp.open(PUT, `${endPointRoot}/user/${id}`, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+
+  const payload = { password: password };
+  xhttp.send(JSON.stringify(payload));
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const response = JSON.parse(this.response);
+    }
+  };
+};
+
+const loadProfile = () => {
+  const response = getProfileById();
+  const { Admin, DateJoined, Username } = response[0];
 
   const rowDateJoined = document.getElementById("row-date-joined");
   rowDateJoined.innerHTML = new Date(DateJoined).toDateString();
