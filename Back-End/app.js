@@ -3,6 +3,7 @@ const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 
 const locationSQL = require("./sql/location-queries");
+const { comparePasswords, hashPassword, } = require("./util/hash-password");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
 const swaggerDocument = require("../swagger.json");
@@ -144,7 +145,7 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
   const registerUserResponse = await registerUser({
     dateJoined,
     isAdmin,
-    password,
+    password: await hashPassword(password),
     username,
   });
   res.status(statusCode.CREATED).end(JSON.stringify(registerUserResponse));
@@ -161,16 +162,16 @@ app.put(`${endPointRoot}/user/:id`, async (req, res) => {
       username,
     });
   } else {
-    //TODO: hash the password before inserting
     updateUserByIdResponse = await updatePasswordByUserId({
       id,
-      password,
+      password: await hashPassword(password),
     });
   }
+  console.log(updateUserByIdResponse);
   await incrementEndpointStats(`${endPointRoot}/user:id`, requestType.PUT);
 
   res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": crossOrigin,
   });
   res.status(statusCode.OK).end(JSON.stringify(updateUserByIdResponse));
