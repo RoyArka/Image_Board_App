@@ -46,7 +46,12 @@ app.get("/stats", (req, res) => {
   res.sendFile(__dirname + "/admin.html");
 });
 
-//logout to login page
+//location page
+app.get("/location", (req, res) => {
+  res.sendFile(__dirname + "/location.html");
+});
+
+//logsout to login page
 app.get("/logout", (req, res) => {
   res.sendFile(__dirname + "/login.html");
 });
