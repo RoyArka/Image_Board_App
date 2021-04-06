@@ -15,8 +15,6 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-<<<<<<< HEAD
-=======
 const theImageForm = document.getElementById("theImageForm");
 const theImageField = document.getElementById("theImageField");
 const theImageContainer = document.getElementById("theImageContainer");
@@ -25,7 +23,6 @@ const theSuccessMessage = document.getElementById("successMessage");
 const theClearImageLink = document.getElementById("clearImage");
 
 let fileName = "";
-
 [
   "drag",
   "dragstart",
@@ -97,15 +94,13 @@ theImageForm.onsubmit = (e) => {
   e.preventDefault();
   const theImageTag = document.querySelector("#theImageTag");
 
-  xhttp.open(POST, `${endPointRoot}/post`, true);
   const payload = {
     fileSrc: theImageTag.getAttribute("src"),
     filename: fileName,
   };
-  console.log(payload);
 
-  xhttp.setRequestHeader("Content-Type", "application/json");
-  xhttp.send(JSON.stringify(payload));
+  xhttp.open(POST, `${endPointRoot}/post`, true);
+  xhttp.send(payload);
 
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -154,4 +149,3 @@ function handleUploadedFile(file) {
   })(img);
   reader.readAsDataURL(file);
 }
->>>>>>> 5f19f45d4f895c0b3094e821707b06df0db72dd8
