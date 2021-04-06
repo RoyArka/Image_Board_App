@@ -115,10 +115,16 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 });
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
-  const { fileSrc, filename } = req.body;
+  const { fileSrc, filename, locationName, userId } = req.body;
 
   writeToImagesDirectory(fileSrc, filename);
-  const createPostResponse = await createPost();
+
+  const createPostResponse = await createPost({
+    userId,
+    imageId,
+    locationName,
+    message,
+  });
 
   const incrementEndpointResponse = await incrementEndpointStats(
     `${endPointRoot}/post`,
@@ -169,6 +175,17 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
     username,
   });
 
+  if (registerUserResponse.code === "ER_DUP_ENTRY") {
+    // Duplicate Entry
+    res.writeHead(statusCode.BAD_REQUEST, {
+      "Content-Type": "application/json",
+    });
+    res
+      .status(statusCode.BAD_REQUEST)
+      .end(JSON.stringify(registerUserResponse));
+    return;
+  }
+
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
   });
@@ -178,6 +195,7 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
 app.put(`${endPointRoot}/user/:id`, async (req, res) => {
   const { password, username } = req.body;
   const id = req.params.id;
+
   let updateUserByIdResponse;
   if (username) {
     updateUserByIdResponse = await updateUsernameByUserId({
@@ -185,6 +203,7 @@ app.put(`${endPointRoot}/user/:id`, async (req, res) => {
       username,
     });
   }
+
   if (password) {
     updateUserByIdResponse = await updatePasswordByUserId({
       id,

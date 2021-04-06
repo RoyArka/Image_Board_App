@@ -8,7 +8,7 @@ const endPointRoot = isProduction()
   ? "https://michealozdoba.com/4537/termproject/API/V1"
   : "4537/termproject/API/V1";
 const GET = "GET";
-const HTTP_STATUS_CODE_CONFLICT = 409;
+const HTTP_STATUS_CODE_BAD_REQUEST = 400;
 const HTTP_STATUS_CODE_CREATED = 201;
 const HTTP_STATUS_CODE_OK = 200;
 const POST = "POST";
@@ -40,7 +40,7 @@ const register = () => {
     }
 
     // TODO: handle user with name already exists
-    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_BAD_REQUEST) {
       const response = JSON.parse(this.response);
     }
 

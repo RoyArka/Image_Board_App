@@ -15,8 +15,6 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-<<<<<<< HEAD
-=======
 const theImageForm = document.getElementById("theImageForm");
 const theImageField = document.getElementById("theImageField");
 const theImageContainer = document.getElementById("theImageContainer");
@@ -96,11 +94,15 @@ const checkFileProperties = (theFile) => {
 theImageForm.onsubmit = (e) => {
   e.preventDefault();
   const theImageTag = document.querySelector("#theImageTag");
+  const locationName = localStorage.getItem("location-id");
+  const userId = localStorage.getItem("user-id");
 
   xhttp.open(POST, `${endPointRoot}/post`, true);
   const payload = {
-    fileSrc: theImageTag.getAttribute("src"),
     filename: fileName,
+    fileSrc: theImageTag.getAttribute("src"),
+    locationName: locationName,
+    userId: userId,
   };
   console.log(payload);
 
@@ -154,4 +156,3 @@ function handleUploadedFile(file) {
   })(img);
   reader.readAsDataURL(file);
 }
->>>>>>> 5f19f45d4f895c0b3094e821707b06df0db72dd8
