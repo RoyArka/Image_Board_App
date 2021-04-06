@@ -15,6 +15,8 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
+<<<<<<< HEAD
+=======
 const theImageForm = document.getElementById("theImageForm");
 const theImageField = document.getElementById("theImageField");
 const theImageContainer = document.getElementById("theImageContainer");
@@ -152,3 +154,4 @@ function handleUploadedFile(file) {
   })(img);
   reader.readAsDataURL(file);
 }
+>>>>>>> 5f19f45d4f895c0b3094e821707b06df0db72dd8
