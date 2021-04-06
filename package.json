@@ -4,7 +4,7 @@
   "description": "",
   "main": "Front-End/index.js",
   "scripts": {
-    "start": "nodemon Front-End/index.js",
+    "start": "nodemon app.js",
     "front": "nodemon Front-End/index.js",
     "back": "nodemon Back-End/app.js"
   },

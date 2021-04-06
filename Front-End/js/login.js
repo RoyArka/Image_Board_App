@@ -14,32 +14,39 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-//AJAX Stats GET
+const login = () => {
+  const password = document.getElementById("inputPassword").value;
+  const username = document.getElementById("inputUsername").value;
+  authenticate(username, password);
+};
 
 const authenticate = (username, password) => {
-  const id = localStorage.getItem("user-id");
-
-  xhttp.open(POST, `${endPointRoot}/user/${id}`, true);
+  xhttp.open(POST, `${endPointRoot}/login`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
 
-  const payload = { username: username };
+  const payload = {
+    username: username,
+    password: password,
+  };
+
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    // TODO: sucessful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
       localStorage.setItem("user-id", response[0].ID);
+      window.location.href = "/home";
     }
 
-    // TODO: client error (duplicate username) unsuccessful username change
+    // TODO: handle user doesn't exist
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
     }
 
-    // TODO: server error
-    if (this.readyState == 4 && this.status == 200) {
+    // TODO: handle server error
+    if (this.readyState == 4 && this.status == 500) {
       const response = JSON.parse(this.response);
     }
+    console.log(this);
   };
 };

@@ -101,4 +101,3 @@ const locationGet = () => {
     link.appendChild(locTitle);
   });
 };
-
