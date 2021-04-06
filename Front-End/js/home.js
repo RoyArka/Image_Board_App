@@ -17,75 +17,26 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-//Creates Div for locations
-const createDiv = (inputLocation) => {
-  const div = document.createElement("div");
-  div.setAttribute("id", "div" + inputLocation);
-  return div;
-};
-
 //Creates title link for locations
 const createLocTitle = (inputLocation) => {
   const locTitle = document.createElement("h4");
   locTitle.innerHTML = inputLocation;
   locTitle.setAttribute("id", inputLocation);
+  locTitle.setAttribute("onclick", "setLocationID(this.id)");
   return locTitle;
 };
 
-//Creates a link for header
-const createLink = () => {
+//Creates anchor link for header
+const createLink = (location) => {
   const link = document.createElement("a");
   link.setAttribute("href", "location");
   return link;
 };
 
-//Creates Caption title
-const createCapTitle = () => {
-  const captionTitle = document.createElement("p");
-  captionTitle.innerHTML = "<h6>Caption:</h6>";
-  return captionTitle;
-};
-
-//Creates input for caption
-const createCapInput = (inputLocation, myCaption) => {
-  const captionInput = document.createElement("input");
-  captionInput.setAttribute("type", "text");
-  captionInput.setAttribute("id", "captionInput" + inputLocation);
-  captionInput.value = myCaption;
-  return captionInput;
-};
-
-//Creates image title
-const createImgTitle = () => {
-  const imgTitle = document.createElement("p");
-  imgTitle.innerHTML = "<h6>Image:</h6>";
-  return imgTitle;
-};
-
-//Creates input for image
-const createImgInput = (inputLocation) => {
-  const imgInput = document.createElement("input");
-  imgInput.setAttribute("type", "file");
-  imgInput.setAttribute("name", "image");
-  imgInput.setAttribute("accept", "image/*");
-  imgInput.setAttribute("id", "imgInput" + inputLocation);
-  return imgInput;
-};
-
-//Creates Post creation button
-const createPostButton = (inputLocation) => {
-  const postButton = document.createElement("button");
-  postButton.innerHTML = "Post";
-  postButton.setAttribute("id", "postButton" + inputLocation);
-  return postButton;
-};
-
-//Creates Delete location button
-const createDeleteButton = (inputLocation) => {
-  const deleteButton = document.createElement("button");
-  deleteButton.innerHTML = "Delete Location";
-  deleteButton.setAttribute("id", "deleteButton" + inputLocation);
-  return deleteButton;
+//Grab location id
+const setLocationID = (locationId) => {
+  console.log(locationId);
+  localStorage.setItem("location-id", locationId);
 };
 
 //Creates Location Block
@@ -97,7 +48,7 @@ const createLocation = () => {
   //Location title
   const locTitle = createLocTitle(inputLocation);
   //Link for locations
-  const link = createLink();
+  const link = createLink(inputLocation);
   //appending elements
   root.appendChild(link);
   link.append(locTitle);
@@ -139,14 +90,15 @@ const locationGet = () => {
   //     });
   //   }
 
-  const stubbedResponse = `[{"Name":"Tokyo"}]`;
+  const stubbedResponse = `[{"Name":"Tokyo"}, {"Name":"Toronto"}, {"Name":"Paris"}]`;
   const rootLocations = document.getElementById("rootLocations");
   const locationsResponse = JSON.parse(stubbedResponse);
 
   locationsResponse.forEach((location) => {
-    const link = createLink();
+    const link = createLink(location.Name);
     const locTitle = createLocTitle(location.Name);
     rootLocations.appendChild(link);
     link.appendChild(locTitle);
   });
 };
+
