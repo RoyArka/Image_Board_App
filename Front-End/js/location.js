@@ -7,6 +7,9 @@ const DELETE = "DELETE";
 const endPointRoot = isProduction()
   ? "https://michealozdoba.com/4537/termproject/API/V1"
   : "4537/termproject/API/V1";
+const imageServingRoot = isProduction()
+  ? "https://michealozdoba.com/4537/termproject"
+  : "http://localhost:3000";
 const GET = "GET";
 const HTTP_STATUS_CODE_BAD_REQUEST = 400;
 const HTTP_STATUS_CODE_CREATED = 201;
@@ -24,14 +27,10 @@ const loadPosts = () => {
   const location = localStorage.getItem("location-id");
   setTitle();
 
-  xhttp.open(GET, `${endPointRoot}/post`, true);
+  xhttp.open(GET, `${endPointRoot}/post/${location}`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
 
-  const payload = {
-    location,
-  };
-
-  xhttp.send(JSON.stringify(payload));
+  xhttp.send();
 
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
@@ -40,7 +39,7 @@ const loadPosts = () => {
       response.forEach((post) => {
         createPost({
           userId: post.UserID,
-          imageSrc: post.Image, // TODO: pass ImageSrc, not binary file
+          imageSrc: post.ImagePath,
           message: post.Message,
         });
       });
@@ -74,7 +73,7 @@ const createPost = ({ userId, imageSrc, message }) => {
 
   const imgElement = document.createElement("img");
   imgElement.setAttribute("class", "post-image");
-  imgElement.setAttribute("src", imageSrc);
+  imgElement.setAttribute("src", `${imageServingRoot}${imageSrc}`);
 
   divPostImage.appendChild(imgElement);
 

@@ -14,8 +14,11 @@ const updatePost = ({ id, quote, author }) => {
   });
 };
 
-const selectAllFromPost = () => {
-  const query = "SELECT * FROM Post";
+const getPostsByLocationName = (locationName) => {
+  const query = `
+    SELECT * FROM Post
+    WHERE LocationName = '${locationName}'
+  `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {
@@ -30,13 +33,13 @@ const selectAllFromPost = () => {
 const createPost = async ({ userId, imagePath, locationName, message }) => {
   const sqlData = {
     UserID: userId,
-    Image: imagePath,
+    ImagePath: imagePath,
     LocationName: locationName,
     Message: message,
   };
 
   const query = `
-  INSERT INTO Post SET ?
+    INSERT INTO Post SET ?
   `;
   return new Promise((resolve, reject) => {
     connection.query(query, sqlData, (err, result) => {
@@ -51,6 +54,6 @@ const createPost = async ({ userId, imagePath, locationName, message }) => {
 
 module.exports = {
   createPost,
-  selectAllFromPost,
+  getPostsByLocationName,
   updatePost,
 };
