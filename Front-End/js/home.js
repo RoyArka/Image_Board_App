@@ -114,7 +114,6 @@ const locationPost = () => {
 
   xhttp.open(POST, `${endPointRoot}/location`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
-  xhttp.setRequestHeader("Accept", "text/html");
   xhttp.send(data);
 
   xhttp.onreadystatechange = function () {

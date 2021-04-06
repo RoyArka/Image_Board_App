@@ -146,12 +146,15 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
 
   if (!correctCredentials) {
     //TODO: handle incorrect credentials
+    console.log("Incorrect Credentials");
+    res.status(409).end(JSON.stringify(getUserByUsernameResponse));
+    return;
   }
 
-  res.writeHead(statusCode.CREATED, {
+  res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
-  res.status(statusCode.CREATED).end(JSON.stringify(getUserByUsernameResponse));
+  res.status(statusCode.OK).end(JSON.stringify(getUserByUsernameResponse));
 });
 
 app.post(`${endPointRoot}/register`, async (req, res) => {

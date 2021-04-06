@@ -32,10 +32,8 @@ const authenticate = (username, password) => {
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    // TODO: handle successful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
-      console.log(response);
       localStorage.setItem("user-id", response[0].ID);
       window.location.href = "/home";
     }
@@ -46,8 +44,9 @@ const authenticate = (username, password) => {
     }
 
     // TODO: handle server error
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState == 4 && this.status == 500) {
       const response = JSON.parse(this.response);
     }
+    console.log(this);
   };
 };
