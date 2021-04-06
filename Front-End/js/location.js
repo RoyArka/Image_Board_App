@@ -127,7 +127,7 @@ const clearImage = (e) => {
   theSuccessMessage.classList.add("hide");
 };
 
-theClearImageLink.onclick = clearImage;
+// theClearImageLink.onclick = clearImage;
 
 function preventDragDefault(e) {
   e.preventDefault();

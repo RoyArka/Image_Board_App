@@ -14,18 +14,30 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
+const login = () => {
+  const password = document.getElementById("inputPassword").value;
+  const username = document.getElementById("inputUsername").value;
+  authenticate(username, password);
+};
+
 const authenticate = (username, password) => {
   xhttp.open(POST, `${endPointRoot}/login`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
 
-  const payload = { username: username };
+  const payload = {
+    username: username,
+    password: password,
+  };
+
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
     // TODO: handle successful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
+      console.log(response);
       localStorage.setItem("user-id", response[0].ID);
+      window.location.href = "/home";
     }
 
     // TODO: handle user doesn't exist
