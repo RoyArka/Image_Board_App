@@ -15,13 +15,18 @@ const updatePost = ({ id, quote, author }) => {
 };
 
 const createPost = async ({ userId, imagePath, locationName, message }) => {
-  console.log(imagePath);
+  const sqlData = {
+    UserID: userId,
+    Image: imagePath,
+    LocationName: locationName,
+    Message: message,
+  };
+
   const query = `
-    INSERT INTO Post (UserID, Image, LocationName, Message)
-    values (${userId}, LOAD_FILE('${imagePath}'), '${locationName}', '${message}')
+  INSERT INTO Post SET ?
   `;
   return new Promise((resolve, reject) => {
-    connection.query(query, (err, result) => {
+    connection.query(query, sqlData, (err, result) => {
       if (err) {
         console.log(err);
         reject(err);

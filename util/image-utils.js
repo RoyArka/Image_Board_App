@@ -7,9 +7,9 @@ function readImageFile(filename) {
   return buf;
 }
 
-const writeToImagesDirectory = (fileSrc, filename) => {
+const writeToImagesDirectory = (fileSrc, filePath) => {
   fileSrc = fileSrc.replace(/data:image\/(png|jpeg);base64,/, "");
-  fs.writeFileSync(`images/${filename}`, fileSrc, {
+  fs.writeFileSync(filePath, fileSrc, {
     encoding: "base64",
   });
 };

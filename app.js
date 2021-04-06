@@ -118,11 +118,12 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 app.post(`${endPointRoot}/post`, async (req, res) => {
   const { fileSrc, filename, locationName, message, userId } = req.body;
   console.log(req.body);
-  writeToImagesDirectory(fileSrc, filename);
+  const filePath = `${__dirname}/images/${filename}`;
+  writeToImagesDirectory(fileSrc, filePath);
 
   const createPostResponse = await createPost({
     userId,
-    imagePath: `./images/${filename}`,
+    imagePath: filePath,
     locationName,
     message,
   });
