@@ -94,6 +94,8 @@ const checkFileProperties = (theFile) => {
 theImageForm.onsubmit = (e) => {
   e.preventDefault();
   const theImageTag = document.querySelector("#theImageTag");
+
+  const caption = document.querySelector("#inputCaption").value;
   const locationName = localStorage.getItem("location-id");
   const userId = localStorage.getItem("user-id");
 
@@ -102,6 +104,7 @@ theImageForm.onsubmit = (e) => {
     filename: fileName,
     fileSrc: theImageTag.getAttribute("src"),
     locationName: locationName,
+    message: caption,
     userId: userId,
   };
   console.log(payload);

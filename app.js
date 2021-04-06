@@ -5,14 +5,15 @@ const swaggerUi = require("swagger-ui-express");
 
 const locationSQL = require("./sql/location-queries");
 const { comparePasswords, hashPassword } = require("./util/hash-password");
+const { createPost } = require("./sql/post-queries");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
 const swaggerDocument = require("./swagger.json");
 const requestType = require("./http/request-types");
 const userSQL = require("./sql/user-queries");
-const writeToImagesDirectory = require("./util/write-to-images-dir");
+const { readImageFile, writeToImagesDirectory } = require("./util/image-utils");
 
-const { createLocation, createPost, selectAllFromLocation } = locationSQL;
+const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
 const {
   getUserById,
@@ -115,16 +116,18 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 });
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
-  const { fileSrc, filename, locationName, userId } = req.body;
-
+  const { fileSrc, filename, locationName, message, userId } = req.body;
+  console.log(req.body);
   writeToImagesDirectory(fileSrc, filename);
 
   const createPostResponse = await createPost({
     userId,
-    imageId,
+    imagePath: `./images/${filename}`,
     locationName,
     message,
   });
+
+  console.log(createPostResponse);
 
   const incrementEndpointResponse = await incrementEndpointStats(
     `${endPointRoot}/post`,

@@ -14,10 +14,11 @@ const updatePost = ({ id, quote, author }) => {
   });
 };
 
-const createPost = async ({ userId, imageId, locationName, message }) => {
+const createPost = async ({ userId, imagePath, locationName, message }) => {
+  console.log(imagePath);
   const query = `
-    INSERT INTO Post (UserID, ImageID, LocationName, Message)
-    values (${userId}, ${imageId}, '${locationName}', '${message}',)
+    INSERT INTO Post (UserID, Image, LocationName, Message)
+    values (${userId}, LOAD_FILE('${imagePath}'), '${locationName}', '${message}')
   `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
