@@ -5,13 +5,13 @@ const swaggerUi = require("swagger-ui-express");
 
 const locationSQL = require("./sql/location-queries");
 const { comparePasswords, hashPassword } = require("./util/hash-password");
-const { createPost } = require("./sql/post-queries");
+const { createPost, selectAllFromPost } = require("./sql/post-queries");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
 const swaggerDocument = require("./swagger.json");
 const requestType = require("./http/request-types");
 const userSQL = require("./sql/user-queries");
-const { readImageFile, writeToImagesDirectory } = require("./util/image-utils");
+const { readFileFromPath, writeFileToPath } = require("./util/image-utils");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
@@ -74,6 +74,17 @@ app.get(`${endPointRoot}/location/:location`, async (req, res) => {
     .end(`Successfully fetched all posts for location ${location}`);
 });
 
+app.get(`${endPointRoot}/post`, async (req, res) => {
+  const selectAllResponse = await selectAllFromPost();
+  console.log(selectAllResponse);
+  await incrementEndpointStats(`${endPointRoot}/post`, requestType.GET);
+
+  res.writeHead(statusCode.OK, {
+    "Content-Type": "application/json",
+  });
+  res.end(JSON.stringify(selectAllResponse));
+});
+
 app.get(`${endPointRoot}/location`, async (req, res) => {
   const selectAllResponse = await selectAllFromLocation();
   console.log(selectAllResponse);
@@ -117,9 +128,9 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
   const { fileSrc, filename, locationName, message, userId } = req.body;
-  console.log(req.body);
   const filePath = `${__dirname}/images/${filename}`;
-  writeToImagesDirectory(fileSrc, filePath);
+
+  writeFileToPath(fileSrc, filePath);
 
   const createPostResponse = await createPost({
     userId,
@@ -128,17 +139,12 @@ app.post(`${endPointRoot}/post`, async (req, res) => {
     message,
   });
 
-  console.log(createPostResponse);
-
-  const incrementEndpointResponse = await incrementEndpointStats(
-    `${endPointRoot}/post`,
-    requestType.POST,
-  );
+  await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
 
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
   });
-  res.status(statusCode.CREATED).end(JSON.stringify(incrementEndpointResponse));
+  res.status(statusCode.CREATED).end(JSON.stringify(createPostResponse));
 });
 
 app.post(`${endPointRoot}/login`, async (req, res) => {
@@ -289,4 +295,9 @@ app.get("/location", (req, res) => {
 //logsout to login page
 app.get("/logout", (req, res) => {
   res.sendFile(__dirname + "/Front-End/login.html");
+});
+
+//location page
+app.get("/post", (req, res) => {
+  res.sendFile(__dirname + "/Front-End/post.html");
 });

@@ -1,13 +1,13 @@
 const fs = require("fs");
 
-function readImageFile(filename) {
+function readFileFromPath(filePath) {
   // read binary data from a file:
-  const bitmap = fs.readFileSync(`images/${filename}`);
+  const bitmap = fs.readFileSync(filePath);
   const buf = new Buffer(bitmap);
   return buf;
 }
 
-const writeToImagesDirectory = (fileSrc, filePath) => {
+const writeFileToPath = (fileSrc, filePath) => {
   fileSrc = fileSrc.replace(/data:image\/(png|jpeg);base64,/, "");
   fs.writeFileSync(filePath, fileSrc, {
     encoding: "base64",
@@ -15,6 +15,6 @@ const writeToImagesDirectory = (fileSrc, filePath) => {
 };
 
 module.exports = {
-  readImageFile,
-  writeToImagesDirectory,
+  readFileFromPath,
+  writeFileToPath,
 };

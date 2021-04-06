@@ -14,6 +14,19 @@ const updatePost = ({ id, quote, author }) => {
   });
 };
 
+const selectAllFromPost = () => {
+  const query = "SELECT * FROM Post";
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
 const createPost = async ({ userId, imagePath, locationName, message }) => {
   const sqlData = {
     UserID: userId,
@@ -38,5 +51,6 @@ const createPost = async ({ userId, imagePath, locationName, message }) => {
 
 module.exports = {
   createPost,
+  selectAllFromPost,
   updatePost,
 };
