@@ -93,10 +93,14 @@ const checkFileProperties = (theFile) => {
 theImageForm.onsubmit = (e) => {
   e.preventDefault();
   const theImageTag = document.querySelector("#theImageTag");
+  const locationName = localStorage.getItem("location-id");
+  const userId = localStorage.getItem("user-id");
 
   const payload = {
-    fileSrc: theImageTag.getAttribute("src"),
     filename: fileName,
+    fileSrc: theImageTag.getAttribute("src"),
+    locationName: locationName,
+    userId: userId,
   };
 
   xhttp.open(POST, `${endPointRoot}/post`, true);
