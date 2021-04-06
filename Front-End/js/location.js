@@ -95,13 +95,15 @@ theImageForm.onsubmit = (e) => {
   e.preventDefault();
   const theImageTag = document.querySelector("#theImageTag");
 
+  xhttp.open(POST, `${endPointRoot}/post`, true);
   const payload = {
     fileSrc: theImageTag.getAttribute("src"),
     filename: fileName,
   };
+  console.log(payload);
 
-  xhttp.open(POST, `${endPointRoot}/post`, true);
-  xhttp.send(payload);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
