@@ -5,15 +5,15 @@ const swaggerUi = require("swagger-ui-express");
 
 const locationSQL = require("./sql/location-queries");
 const { comparePasswords, hashPassword } = require("./util/hash-password");
+const { createPost, getPostsByLocationName } = require("./sql/post-queries");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
 const swaggerDocument = require("./swagger.json");
 const requestType = require("./http/request-types");
 const userSQL = require("./sql/user-queries");
-const writeToImagesDirectory = require("./util/write-to-images-dir");
-const { createToken } = require("./util/auth-token");
+const { writeFileToPath } = require("./util/image-utils");
 
-const { createLocation, createPost, selectAllFromLocation } = locationSQL;
+const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
 const {
   getUserById,
@@ -35,8 +35,13 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("Front-End"));
+app.use("/images", express.static(__dirname + "/images"));
 // app.use(express.static("./"));
-app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/documentation.html",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument),
+);
 
 app.delete(`${endPointRoot}/location`, async (req, res) => {
   const location = req.body.location;
@@ -72,6 +77,19 @@ app.get(`${endPointRoot}/location/:location`, async (req, res) => {
   res
     .status(statusCode.OK)
     .end(`Successfully fetched all posts for location ${location}`);
+});
+
+app.get(`${endPointRoot}/post/:location`, async (req, res) => {
+  const getPostsByLocationNameResponse = await getPostsByLocationName(
+    req.params.location,
+  );
+  console.log(getPostsByLocationNameResponse);
+  await incrementEndpointStats(`${endPointRoot}/post`, requestType.GET);
+
+  res.writeHead(statusCode.OK, {
+    "Content-Type": "application/json",
+  });
+  res.end(JSON.stringify(getPostsByLocationNameResponse));
 });
 
 app.get(`${endPointRoot}/location`, async (req, res) => {
@@ -116,20 +134,32 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 });
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
+<<<<<<< HEAD
   const { fileSrc, filename } = req.body;
 
   writeToImagesDirectory(fileSrc, filename);
   const createPostResponse = await createPost();
+=======
+  const { fileSrc, filename, locationName, message, userId } = req.body;
+  const absoluteFilePath = `${__dirname}/images/${filename}`;
+  const relativeFilePath = `/images/${filename}`;
 
-  const incrementEndpointResponse = await incrementEndpointStats(
-    `${endPointRoot}/post`,
-    requestType.POST,
-  );
+  writeFileToPath(fileSrc, absoluteFilePath);
+  console.log({ fileSrc, filename, locationName, message, userId });
+  const createPostResponse = await createPost({
+    userId,
+    imagePath: relativeFilePath,
+    locationName,
+    message,
+  });
+>>>>>>> 2951a59dc36fee027c676a90208dcc7eaa81f1f3
+
+  await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
 
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
   });
-  res.status(statusCode.CREATED).end(JSON.stringify(incrementEndpointResponse));
+  res.status(statusCode.CREATED).end(JSON.stringify(createPostResponse));
 });
 
 app.post(`${endPointRoot}/login`, async (req, res) => {
@@ -271,4 +301,9 @@ app.get("/location", (req, res) => {
 //logsout to login page
 app.get("/logout", (req, res) => {
   res.sendFile(__dirname + "/Front-End/login.html");
+});
+
+//location page
+app.get("/post", (req, res) => {
+  res.sendFile(__dirname + "/Front-End/post.html");
 });

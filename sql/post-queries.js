@@ -14,10 +14,10 @@ const updatePost = ({ id, quote, author }) => {
   });
 };
 
-const createPost = async ({ userId, imageId, locationName, message }) => {
+const getPostsByLocationName = (locationName) => {
   const query = `
-    INSERT INTO Post (UserID, ImageID, LocationName, Message)
-    values (${userId}, ${imageId}, '${locationName}', '${message}',)
+    SELECT * FROM Post
+    WHERE LocationName = '${locationName}'
   `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
@@ -30,7 +30,30 @@ const createPost = async ({ userId, imageId, locationName, message }) => {
   });
 };
 
+const createPost = async ({ userId, imagePath, locationName, message }) => {
+  const sqlData = {
+    UserID: userId,
+    ImagePath: imagePath,
+    LocationName: locationName,
+    Message: message,
+  };
+
+  const query = `
+    INSERT INTO Post SET ?
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, sqlData, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   createPost,
+  getPostsByLocationName,
   updatePost,
 };

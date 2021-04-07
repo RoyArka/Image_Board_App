@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 const isProduction = () => {
   return !document.URL.includes("localhost");
 };
@@ -7,18 +8,14 @@ const DELETE = "DELETE";
 const endPointRoot = isProduction()
   ? "https://michealozdoba.com/4537/termproject/API/V1"
   : "4537/termproject/API/V1";
-const imageServingRoot = isProduction()
-  ? "https://michealozdoba.com/4537/termproject"
-  : "http://localhost:3000";
 const GET = "GET";
-const HTTP_STATUS_CODE_BAD_REQUEST = 400;
-const HTTP_STATUS_CODE_CREATED = 201;
+const HTTP_STATUS_CODE_CONFLICT = 409;
 const HTTP_STATUS_CODE_OK = 200;
+const HTTP_STATUS_CODE_CREATED = 201;
 const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-<<<<<<< HEAD
 const theImageForm = document.getElementById("theImageForm");
 const theImageField = document.getElementById("theImageField");
 const theImageContainer = document.getElementById("theImageContainer");
@@ -27,6 +24,7 @@ const theSuccessMessage = document.getElementById("successMessage");
 const theClearImageLink = document.getElementById("clearImage");
 
 let fileName = "";
+
 [
   "drag",
   "dragstart",
@@ -97,94 +95,72 @@ const checkFileProperties = (theFile) => {
 theImageForm.onsubmit = (e) => {
   e.preventDefault();
   const theImageTag = document.querySelector("#theImageTag");
-  const locationName = localStorage.getItem("location-id");
+
+  const caption = document.querySelector("#inputCaption").value;
+  const locationName = document.querySelector("#inputLocation").value;
   const userId = localStorage.getItem("user-id");
 
+  xhttp.open(POST, `${endPointRoot}/post`, true);
   const payload = {
     filename: fileName,
     fileSrc: theImageTag.getAttribute("src"),
     locationName: locationName,
+    message: caption,
     userId: userId,
   };
 
-  xhttp.open(POST, `${endPointRoot}/post`, true);
-  xhttp.send(payload);
-=======
-const setTitle = () => {
-  const location = localStorage.getItem("location-id");
-  document.getElementById("locationTitle").innerHTML = `${location} Posts`;
-};
-
-const loadPosts = () => {
-  const location = localStorage.getItem("location-id");
-  setTitle();
-
-  xhttp.open(GET, `${endPointRoot}/post/${location}`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
-
-  xhttp.send();
->>>>>>> 2951a59dc36fee027c676a90208dcc7eaa81f1f3
+  xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CREATED) {
+      theSuccessMessage.innerHTML = "Image uploaded successfully";
+      theSuccessMessage.classList.remove("hide");
       const response = JSON.parse(this.response);
       console.log(response);
-      response.forEach((post) => {
-        createPost({
-          userId: post.UserID,
-          imageSrc: post.ImagePath,
-          message: post.Message,
-        });
-      });
+      setTimeout(() => {
+        theSuccessMessage.classList.add("hide");
+      }, 3000);
     }
   };
 };
 
-const createPost = ({ userId, imageSrc, message }) => {
-  const cardBody = document.createElement("div");
-  cardBody.setAttribute("class", "card-body");
+const clearImage = (e) => {
+  if (e) {
+    e.preventDefault();
+  }
 
-  const divPost = document.createElement("div");
-  divPost.setAttribute(
-    "class",
-    "d-flex flex-column align-items-center text-center",
-  );
+  const theImageTag = document.querySelector("#theImageTag");
 
-  // Create Username Div
-  const divPostUsername = document.createElement("div");
-  divPostUsername.setAttribute("class", "mt-3");
+  if (theImageTag) {
+    theImageContainer.removeChild(theImageTag);
+    theImageField.value = null;
+  }
 
-  const h4Username = document.createElement("h4");
-  h4Username.setAttribute("class", "post-username");
-  h4Username.innerHTML = userId;
-
-  divPostUsername.appendChild(h4Username);
-
-  // Create Image Div
-  const divPostImage = document.createElement("div");
-  divPostImage.setAttribute("class", "mt-3");
-
-  const imgElement = document.createElement("img");
-  imgElement.setAttribute("class", "post-image");
-  imgElement.setAttribute("src", `${imageServingRoot}${imageSrc}`);
-
-  divPostImage.appendChild(imgElement);
-
-  // Create Message Div
-  const divPostMessage = document.createElement("div");
-  divPostMessage.setAttribute("class", "mt-3");
-  divPostMessage.setAttribute("class", "post-message");
-  divPostMessage.innerHTML = message;
-
-  divPost.appendChild(divPostUsername);
-  divPost.appendChild(divPostImage);
-  divPost.appendChild(divPostMessage);
-
-  cardBody.appendChild(divPost);
-
-  const rootLocationPosts = document.getElementById("rootLocationPosts");
-  const hr = document.createElement("hr");
-
-  rootLocationPosts.appendChild(cardBody);
-  rootLocationPosts.append(hr);
+  theErrorMessage.classList.add("hide");
+  theSuccessMessage.classList.add("hide");
 };
+
+// theClearImageLink.onclick = clearImage;
+
+function preventDragDefault(e) {
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+function handleUploadedFile(file) {
+  fileName = file.name;
+  clearImage();
+  const img = document.createElement("img");
+  img.setAttribute("id", "theImageTag");
+  img.file = file;
+  theImageContainer.appendChild(img);
+
+  const reader = new FileReader();
+  reader.onload = (function (aImg) {
+    return function (e) {
+      aImg.src = e.target.result;
+    };
+  })(img);
+  reader.readAsDataURL(file);
+}
