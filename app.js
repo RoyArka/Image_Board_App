@@ -134,12 +134,6 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
 });
 
 app.post(`${endPointRoot}/post`, async (req, res) => {
-<<<<<<< HEAD
-  const { fileSrc, filename } = req.body;
-
-  writeToImagesDirectory(fileSrc, filename);
-  const createPostResponse = await createPost();
-=======
   const { fileSrc, filename, locationName, message, userId } = req.body;
   const absoluteFilePath = `${__dirname}/images/${filename}`;
   const relativeFilePath = `/images/${filename}`;
@@ -152,7 +146,6 @@ app.post(`${endPointRoot}/post`, async (req, res) => {
     locationName,
     message,
   });
->>>>>>> 2951a59dc36fee027c676a90208dcc7eaa81f1f3
 
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
 
