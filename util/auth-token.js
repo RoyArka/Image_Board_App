@@ -10,7 +10,8 @@ const createToken = (username, userID) => {
     },
     key,
     {
-      expiresIn: "1h",
+      //time till token expires since creation
+      expiresIn: "5 days",
     },
   );
 };

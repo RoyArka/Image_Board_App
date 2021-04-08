@@ -1,5 +1,4 @@
 //Home Page functions
-
 /* eslint-disable no-unused-vars */
 const isProduction = () => {
   return !document.URL.includes("localhost");
@@ -16,6 +15,7 @@ const HTTP_STATUS_CODE_OK = 200;
 const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
+const AUTHBEARER = "Bearer ";
 
 //Creates title link for locations
 const createLocTitle = (inputLocation) => {
@@ -56,6 +56,13 @@ const createLocation = () => {
   locationPost();
 };
 
+//Grabs valid token stored in local storage.
+const getTokenLS = () => {
+  const token = localStorage.getItem("token");
+  const authValue = AUTHBEARER + token;
+  return authValue;
+};
+
 //AJAX Location POST
 const locationPost = () => {
   const locationValue = document.getElementById("inputLocation").value;
@@ -65,6 +72,7 @@ const locationPost = () => {
 
   xhttp.open(POST, `${endPointRoot}/location`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("Authorization", getTokenLS());
   xhttp.setRequestHeader("Accept", "text/html");
   xhttp.send(data);
 
@@ -78,6 +86,7 @@ const locationPost = () => {
 //AJAX Location GET
 const locationGet = () => {
   // xhttp.open(GET, `${endPointRoot}/location`, true);
+  //xhttp.setRequestHeader("Authorization", getTokenLS());
   // xhttp.send();
   // xhttp.onreadystatechange = function () {
   //   if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {

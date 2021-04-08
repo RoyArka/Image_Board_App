@@ -35,6 +35,7 @@ const authenticate = (username, password) => {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
       localStorage.setItem("user-id", response[0].ID);
+      localStorage.setItem("token", response[0].Token);
       window.location.href = "/home";
     }
 

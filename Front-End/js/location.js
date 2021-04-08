@@ -18,7 +18,6 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-<<<<<<< HEAD
 const theImageForm = document.getElementById("theImageForm");
 const theImageField = document.getElementById("theImageField");
 const theImageContainer = document.getElementById("theImageContainer");
@@ -109,21 +108,6 @@ theImageForm.onsubmit = (e) => {
 
   xhttp.open(POST, `${endPointRoot}/post`, true);
   xhttp.send(payload);
-=======
-const setTitle = () => {
-  const location = localStorage.getItem("location-id");
-  document.getElementById("locationTitle").innerHTML = `${location} Posts`;
-};
-
-const loadPosts = () => {
-  const location = localStorage.getItem("location-id");
-  setTitle();
-
-  xhttp.open(GET, `${endPointRoot}/post/${location}`, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
-
-  xhttp.send();
->>>>>>> 2951a59dc36fee027c676a90208dcc7eaa81f1f3
 
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {

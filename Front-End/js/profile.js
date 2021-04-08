@@ -13,6 +13,7 @@ const HTTP_STATUS_CODE_OK = 200;
 const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
+const AUTHBEARER = "Bearer ";
 
 const createRowPassword = (password) => {
   const divHeader = document.getElementById("row-header-password");
@@ -138,6 +139,7 @@ const handleChangeUsername = () => {
 const getProfileById = () => {
   const id = localStorage.getItem("user-id");
   xhttp.open(GET, `${endPointRoot}/user/${id}`, true);
+  xhttp.setRequestHeader("Authorization", getTokenLS());
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
@@ -217,4 +219,11 @@ const loadProfile = () => {
 
   const rowUsername = document.getElementById("row-username");
   rowUsername.innerHTML = Username;
+};
+
+//Grabs valid token stored in local storage.
+const getTokenLS = () => {
+  const token = localStorage.getItem("token");
+  const authValue = AUTHBEARER + token;
+  return authValue;
 };
