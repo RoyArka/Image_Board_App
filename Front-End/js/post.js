@@ -15,6 +15,7 @@ const HTTP_STATUS_CODE_CREATED = 201;
 const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
+const AUTHBEARER = "Bearer ";
 
 const theImageForm = document.getElementById("theImageForm");
 const theImageField = document.getElementById("theImageField");
@@ -110,6 +111,7 @@ theImageForm.onsubmit = (e) => {
   };
 
   xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("Authorization", getTokenLS());
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
@@ -164,3 +166,10 @@ function handleUploadedFile(file) {
   })(img);
   reader.readAsDataURL(file);
 }
+
+//Grabs valid token stored in local storage.
+const getTokenLS = () => {
+  const token = localStorage.getItem("token");
+  const authValue = AUTHBEARER + token;
+  return authValue;
+};

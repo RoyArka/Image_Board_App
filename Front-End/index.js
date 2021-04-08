@@ -16,6 +16,8 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
+// TODO: routes will need to be changed to  "BASE-URL/API/V1/"" . . .
+
 //documentation page
 app.get("/doc", (req, res) => {
   res.sendFile(__dirname + "/documentation.html");

@@ -12,6 +12,8 @@ const swaggerDocument = require("./swagger.json");
 const requestType = require("./http/request-types");
 const userSQL = require("./sql/user-queries");
 const { writeFileToPath } = require("./util/image-utils");
+const { createToken } = require("./util/auth-token");
+const checkAuth = require("./util/check-auth");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
@@ -43,7 +45,7 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
-app.delete(`${endPointRoot}/location`, async (req, res) => {
+app.delete(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   const location = req.body.location;
 
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.DELETE);
@@ -55,7 +57,7 @@ app.delete(`${endPointRoot}/location`, async (req, res) => {
     .end(`Successfully deleted location with name ${location}`);
 });
 
-app.delete(`${endPointRoot}/post`, async (req, res) => {
+app.delete(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const postId = req.body.id;
 
   res.writeHead(statusCode.OK, {
@@ -64,7 +66,7 @@ app.delete(`${endPointRoot}/post`, async (req, res) => {
   res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
 });
 
-app.get(`${endPointRoot}/location/:location`, async (req, res) => {
+app.get(`${endPointRoot}/location/:location`, checkAuth, async (req, res) => {
   const location = req.params.location;
   await incrementEndpointStats(
     `${endPointRoot}/location/:location`,
@@ -79,7 +81,7 @@ app.get(`${endPointRoot}/location/:location`, async (req, res) => {
     .end(`Successfully fetched all posts for location ${location}`);
 });
 
-app.get(`${endPointRoot}/post/:location`, async (req, res) => {
+app.get(`${endPointRoot}/post/:location`, checkAuth, async (req, res) => {
   const getPostsByLocationNameResponse = await getPostsByLocationName(
     req.params.location,
   );
@@ -92,7 +94,7 @@ app.get(`${endPointRoot}/post/:location`, async (req, res) => {
   res.end(JSON.stringify(getPostsByLocationNameResponse));
 });
 
-app.get(`${endPointRoot}/location`, async (req, res) => {
+app.get(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   const selectAllResponse = await selectAllFromLocation();
   console.log(selectAllResponse);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.GET);
@@ -103,7 +105,7 @@ app.get(`${endPointRoot}/location`, async (req, res) => {
   res.end(JSON.stringify(selectAllResponse));
 });
 
-app.get(`${endPointRoot}/stats`, async (req, res) => {
+app.get(`${endPointRoot}/stats`, checkAuth, async (req, res) => {
   const selectAllResponse = await selectAllFromStats();
   await incrementEndpointStats(`${endPointRoot}/stats`, requestType.GET);
 
@@ -113,7 +115,7 @@ app.get(`${endPointRoot}/stats`, async (req, res) => {
   res.end(JSON.stringify(selectAllResponse));
 });
 
-app.get(`${endPointRoot}/user/:id`, async (req, res) => {
+app.get(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
   const getUserByIdResponse = await getUserById(req.params.id);
   await incrementEndpointStats(`${endPointRoot}/user/:id`, requestType.GET);
 
@@ -123,7 +125,7 @@ app.get(`${endPointRoot}/user/:id`, async (req, res) => {
   res.end(JSON.stringify(getUserByIdResponse));
 });
 
-app.post(`${endPointRoot}/location`, async (req, res) => {
+app.post(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   const createLocationResponse = await createLocation(req.body.location);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
 
@@ -133,7 +135,7 @@ app.post(`${endPointRoot}/location`, async (req, res) => {
   res.status(statusCode.CREATED).end(JSON.stringify(createLocationResponse));
 });
 
-app.post(`${endPointRoot}/post`, async (req, res) => {
+app.post(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const { fileSrc, filename, locationName, message, userId } = req.body;
   const absoluteFilePath = `${__dirname}/images/${filename}`;
   const relativeFilePath = `/images/${filename}`;
@@ -176,6 +178,10 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
     return;
   }
 
+  //Creating token for user
+  const token = createToken(username, userData.ID);
+  getUserByUsernameResponse[0].Token = token;
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
@@ -193,27 +199,15 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
     username,
   });
 
-  if (registerUserResponse.code === "ER_DUP_ENTRY") {
-    // Duplicate Entry
-    res.writeHead(statusCode.BAD_REQUEST, {
-      "Content-Type": "application/json",
-    });
-    res
-      .status(statusCode.BAD_REQUEST)
-      .end(JSON.stringify(registerUserResponse));
-    return;
-  }
-
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
   });
   res.status(statusCode.CREATED).end(JSON.stringify(registerUserResponse));
 });
 
-app.put(`${endPointRoot}/user/:id`, async (req, res) => {
+app.put(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
   const { password, username } = req.body;
   const id = req.params.id;
-
   let updateUserByIdResponse;
   if (username) {
     updateUserByIdResponse = await updateUsernameByUserId({
@@ -221,7 +215,6 @@ app.put(`${endPointRoot}/user/:id`, async (req, res) => {
       username,
     });
   }
-
   if (password) {
     updateUserByIdResponse = await updatePasswordByUserId({
       id,
@@ -237,7 +230,7 @@ app.put(`${endPointRoot}/user/:id`, async (req, res) => {
   res.status(statusCode.OK).end(JSON.stringify(updateUserByIdResponse));
 });
 
-app.put(`${endPointRoot}/post`, async (req, res) => {
+app.put(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const id = req.params.id;
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
 

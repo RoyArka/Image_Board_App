@@ -18,19 +18,96 @@ const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 
-const setTitle = () => {
-  const location = localStorage.getItem("location-id");
-  document.getElementById("locationTitle").innerHTML = `${location} Posts`;
+const theImageForm = document.getElementById("theImageForm");
+const theImageField = document.getElementById("theImageField");
+const theImageContainer = document.getElementById("theImageContainer");
+const theErrorMessage = document.getElementById("errorMessage");
+const theSuccessMessage = document.getElementById("successMessage");
+const theClearImageLink = document.getElementById("clearImage");
+
+let fileName = "";
+[
+  "drag",
+  "dragstart",
+  "dragend",
+  "dragover",
+  "dragenter",
+  "dragleave",
+  "drop",
+].forEach(function (dragEvent) {
+  theImageContainer.addEventListener(dragEvent, preventDragDefault);
+});
+
+["dragover", "dragenter"].forEach((dragEvent) => {
+  theImageContainer.addEventListener(dragEvent, function () {
+    theImageContainer.classList.add("dragging");
+  });
+});
+
+["dragleave", "dragend", "drop"].forEach((dragEvent) => {
+  theImageContainer.addEventListener(dragEvent, function () {
+    theImageContainer.classList.remove("dragging");
+  });
+});
+
+theImageContainer.addEventListener("drop", function (e) {
+  if (e.dataTransfer.files.length > 1) {
+    theErrorMessage.innerHTML = "Drag only one file...";
+    theErrorMessage.classList.remove("hide");
+    return false;
+  }
+  const theFile = e.dataTransfer.files[0];
+  theImageField.files[0] = theFile;
+
+  if (checkFileProperties(theFile)) {
+    handleUploadedFile(theFile);
+  }
+});
+
+theImageField.onchange = (e) => {
+  const theFile = e.target.files[0];
+
+  if (checkFileProperties(theFile)) {
+    handleUploadedFile(theFile);
+  }
 };
 
-const loadPosts = () => {
-  const location = localStorage.getItem("location-id");
-  setTitle();
+const checkFileProperties = (theFile) => {
+  theErrorMessage.classList.add("hide");
+  theSuccessMessage.classList.add("hide");
 
-  xhttp.open(GET, `${endPointRoot}/post/${location}`, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
+  if (theFile.type !== "image/png" && theFile.type !== "image/jpeg") {
+    console.log("File type mismatch");
+    theErrorMessage.innerHTML = "File type should be png or jpg/jpeg...";
+    theErrorMessage.classList.remove("hide");
+    return false;
+  }
 
-  xhttp.send();
+  if (theFile.size > 500000) {
+    console.log("File too large");
+    theErrorMessage.innerHTML = "File too large, cannot be more than 500KB...";
+    theErrorMessage.classList.remove("hide");
+    return false;
+  }
+
+  return true;
+};
+
+theImageForm.onsubmit = (e) => {
+  e.preventDefault();
+  const theImageTag = document.querySelector("#theImageTag");
+  const locationName = localStorage.getItem("location-id");
+  const userId = localStorage.getItem("user-id");
+
+  const payload = {
+    filename: fileName,
+    fileSrc: theImageTag.getAttribute("src"),
+    locationName: locationName,
+    userId: userId,
+  };
+
+  xhttp.open(POST, `${endPointRoot}/post`, true);
+  xhttp.send(payload);
 
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
