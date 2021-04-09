@@ -20,6 +20,7 @@ const userSQL = require("./sql/user-queries");
 const { writeFileToPath } = require("./util/image-utils");
 const { createToken } = require("./util/auth-token");
 const checkAuth = require("./util/check-auth");
+const responseMsg = require("./http/response-message");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
@@ -51,6 +52,7 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
+//TODO: will need to change the response here once this is fully done
 app.delete(`${endPointRoot}/location/:id`, checkAuth, async (req, res) => {
   const location = req.params.location;
 
@@ -73,7 +75,7 @@ app.delete(`${endPointRoot}/post/:id`, checkAuth, async (req, res) => {
   });
 
   if (deletePostByIdResponse.affectedRows === 1) {
-    deletePostByIdResponse.message = "Delete Success";
+    deletePostByIdResponse.message = responseMsg.DEL_POST_SUCCESS;
   }
 
   res.end(JSON.stringify(deletePostByIdResponse));
@@ -96,6 +98,7 @@ app.get(`${endPointRoot}/posts/:username`, checkAuth, async (req, res) => {
   const username = req.params.username;
   const getPostsByUsernameResponse = await getPostsByUsername(username);
   console.log(getPostsByUsernameResponse);
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
@@ -107,20 +110,30 @@ app.get(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   console.log(selectAllResponse);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.GET);
 
+  const properResponse = {
+    message: responseMsg.GET_LOCATIONS_SUCCESS,
+    response: selectAllResponse,
+  };
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
-  res.end(JSON.stringify(selectAllResponse));
+  res.end(JSON.stringify(properResponse));
 });
 
 app.get(`${endPointRoot}/stats`, checkAuth, async (req, res) => {
   const selectAllResponse = await selectAllFromStats();
   await incrementEndpointStats(`${endPointRoot}/stats`, requestType.GET);
 
+  const properResponse = {
+    message: responseMsg.GET_STATS_SUCCESS,
+    response: selectAllResponse,
+  }
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
-  res.end(JSON.stringify(selectAllResponse));
+  res.end(JSON.stringify(properResponse));
 });
 
 app.get(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
@@ -131,13 +144,19 @@ app.get(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
     "Content-Type": "application/json",
   });
 
-  res.end(JSON.stringify(getUserByIdResponse));
+  const properResponse = {
+    message: responseMsg.GET_USER_SUCCESS,
+    response: getUserByIdResponse,
+  };
+
+  res.end(JSON.stringify(properResponse));
 });
 
 app.post(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   const createLocationResponse = await createLocation(req.body.location);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
 
+  createLocationResponse.message = responseMsg.LOCATION_SUCCESS;
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
   });
@@ -162,6 +181,7 @@ app.post(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   console.log("GET USER BY ID RESPONSE", getUserByIdResponse);
   console.log("CREATE POST RESPONSE", createPostResponse);
 
+  createPostResponse.message = responseMsg.POST_SUCCESS;
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
 
   res.writeHead(statusCode.CREATED, {
@@ -174,8 +194,21 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   const { password, username } = req.body;
   const getUserByUsernameResponse = await getUserByUsername(username);
   const userData = getUserByUsernameResponse[0];
+
+  const invalidPassRes = {
+    message: responseMsg.INCORRECT_PASSWORD,
+    response: getUserByUsernameResponse,
+  }
+
+  const invalidUserRes = {
+    message: responseMsg.INCORRECT_USERNAME,
+    response: getUserByUsernameResponse,
+  }
+
   if (!userData) {
     // TODO: handle invalid username
+    console.log("Incorrect Credentials");
+    res.status(409).end(JSON.stringify(invalidUserRes));
     return;
   }
 
@@ -187,13 +220,14 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   if (!correctCredentials) {
     //TODO: handle incorrect credentials
     console.log("Incorrect Credentials");
-    res.status(409).end(JSON.stringify(getUserByUsernameResponse));
+    res.status(409).end(JSON.stringify(invalidPassRes));
     return;
   }
 
   //Creating token for user
   const token = createToken(username, userData.ID);
   getUserByUsernameResponse[0].Token = token;
+  getUserByUsernameResponse[0].message = responseMsg.LOGIN_SUCCESS;
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
@@ -212,6 +246,7 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
     username,
   });
 
+  registerUserResponse.message = responseMsg.REGISTER_SUCCESS;
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
   });
@@ -237,6 +272,8 @@ app.put(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
   console.log(updateUserByIdResponse);
   await incrementEndpointStats(`${endPointRoot}/user:id`, requestType.PUT);
 
+  updateUserByIdResponse.message = responseMsg.PUT_USER_SUCCESS;
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
@@ -250,6 +287,7 @@ app.put(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
 
   console.log("UPDATE POST BY ID RESPONSE", updatePostByIdResponse);
+  updatePostByIdResponse = responseMsg.PUT_POST_SUCCESS;
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",

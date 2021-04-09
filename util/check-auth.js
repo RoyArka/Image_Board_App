@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const key = config.JWT_KEY;
 const statusCode = require("../http/status-codes");
+const failedAuth = "Unauthorized Client, Authentication Failed";
 
 module.exports = (req, res, next) => {
   try {
@@ -11,7 +12,7 @@ module.exports = (req, res, next) => {
     next();
   } catch (error) {
     return res.status(statusCode.UNAUTHORIZED).json({
-      message: "Authentication failed",
+      message: failedAuth,
     });
   }
 };
