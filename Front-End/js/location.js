@@ -22,7 +22,7 @@ const xhttp = new XMLHttpRequest();
 const loadPosts = () => {
   const location = localStorage.getItem("location-id");
   document.getElementById("locationTitle").innerHTML = `${location} Posts`;
-  xhttp.open(GET, `${endPointRoot}/post/${location}`);
+  xhttp.open(GET, `${endPointRoot}/location/${location}`);
   xhttp.setRequestHeader("Authorization", getTokenLS());
   xhttp.send();
 

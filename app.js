@@ -71,20 +71,6 @@ app.delete(`${endPointRoot}/post/:id`, checkAuth, async (req, res) => {
 });
 
 app.get(`${endPointRoot}/location/:location`, checkAuth, async (req, res) => {
-  const location = req.params.location;
-  await incrementEndpointStats(
-    `${endPointRoot}/location/:location`,
-    requestType.GET,
-  );
-  res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
-  });
-  res
-    .status(statusCode.OK)
-    .end(`Successfully fetched all posts for location ${location}`);
-});
-
-app.get(`${endPointRoot}/post/:location`, checkAuth, async (req, res) => {
   const getPostsByLocationNameResponse = await getPostsByLocationName(
     req.params.location,
   );
