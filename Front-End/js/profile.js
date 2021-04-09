@@ -205,8 +205,8 @@ const createPost = ({ imageSrc, location, message, postId }) => {
   const cardBodyPost = document.createElement("div");
   cardBodyPost.setAttribute("class", "card-body");
 
-  const divPost = document.createElement("div");
-  divPost.setAttribute(
+  const divFlexPost = document.createElement("div");
+  divFlexPost.setAttribute(
     "class",
     "d-flex flex-column align-items-center text-center",
   );
@@ -233,64 +233,46 @@ const createPost = ({ imageSrc, location, message, postId }) => {
   divPostMessage.setAttribute("class", "post-message");
   divPostMessage.innerHTML = message;
 
-  divColumnPost.appendChild(divCardMb3);
-  divCardMb3.appendChild(cardBodyPost);
-
-  divPost.appendChild(divPostLocation);
-  divPost.appendChild(divPostImage);
-  divPost.appendChild(divPostMessage);
-
-  cardBodyPost.appendChild(divPost);
-  const hr = document.createElement("hr");
-  rootPosts.append(hr);
-
-  // Delete / Update Card and Location
-  const divColumnButtons = document.createElement("div");
-  divColumnButtons.setAttribute("class", "col-md-2 text-center");
-
-  const br1 = document.createElement("br");
-  const br2 = document.createElement("br");
-
-  divColumnButtons.appendChild(br1);
-  divColumnButtons.appendChild(br2);
-
-  const divButtons = document.createElement("div");
-  divButtons.setAttribute(
+  // Create Div For Buttons
+  const divFlexButtons = document.createElement("div");
+  divFlexButtons.setAttribute(
     "class",
-    "d-flex flex-column align-items-center text-center",
+    "d-flex flex-row align-items-center text-center",
   );
-  divColumnButtons.appendChild(divButtons);
 
+  // Update Button
   const updateButton = document.createElement("button");
   updateButton.setAttribute(
     "class",
     "btn btn-lg btn-outline-info update-button",
   );
   updateButton.setAttribute("onclick", `updatePostById(${postId})`);
-  updateButton.value = "Update";
+  updateButton.innerHTML = "Update";
 
+  // Delete Button
   const deleteButton = document.createElement("button");
   deleteButton.setAttribute(
     "class",
     "btn btn-lg btn-outline-danger delete-button",
   );
 
-  // TODO: DELETE POST BY ID
   deleteButton.setAttribute("onclick", `deletePostById(${postId})`);
-  deleteButton.value = "Delete";
+  deleteButton.innerHTML = "Delete";
 
-  const br3 = document.createElement("br");
-  const br4 = document.createElement("br");
-  const br5 = document.createElement("br");
+  divColumnPost.appendChild(divCardMb3);
+  divCardMb3.appendChild(cardBodyPost);
 
-  divButtons.appendChild(updateButton);
-  divButtons.appendChild(br3);
-  divButtons.appendChild(br4);
-  divButtons.appendChild(br5);
-  divButtons.appendChild(deleteButton);
+  divFlexPost.appendChild(divPostLocation);
+  divFlexPost.appendChild(divPostImage);
+  divFlexPost.appendChild(divPostMessage);
+  divFlexPost.appendChild(divFlexButtons);
+  divFlexButtons.appendChild(updateButton);
+  divFlexButtons.appendChild(deleteButton);
+
+  cardBodyPost.appendChild(divFlexPost);
+  const hr = document.createElement("hr");
 
   rootPosts.appendChild(divColumnPost);
-  rootPosts.append(divColumnButtons);
   rootPosts.append(hr);
 };
 

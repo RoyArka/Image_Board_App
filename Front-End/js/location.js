@@ -95,9 +95,11 @@ const createPost = ({ username, imageSrc, message }) => {
 
   const divGutters = document.createElement("div");
   divGutters.setAttribute("class", "row gutters-sm");
-  rootLocationPosts.appendChild(divGutters);
 
+  const hr = document.createElement("hr");
+  rootLocationPosts.appendChild(divGutters);
   rootLocationPosts.appendChild(cardBody);
+  rootLocationPosts.appendChild(hr);
 };
 
 //Grabs valid token stored in local storage.

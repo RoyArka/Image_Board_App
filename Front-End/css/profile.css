@@ -1,0 +1,11 @@
+.update-button {
+  height: 50px;
+  margin-right: 10px;
+  width: 100px;
+}
+
+.delete-button {
+  height: 50px;
+  margin-left: 10px;
+  width: 100px;
+}
