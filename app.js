@@ -7,8 +7,10 @@ const locationSQL = require("./sql/location-queries");
 const { comparePasswords, hashPassword } = require("./util/hash-password");
 const {
   createPost,
+  deletePostById,
   getPostsByLocationName,
   getPostsByUsername,
+  updatePostById,
 } = require("./sql/post-queries");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
@@ -62,12 +64,19 @@ app.delete(`${endPointRoot}/location/:id`, checkAuth, async (req, res) => {
 });
 
 app.delete(`${endPointRoot}/post/:id`, checkAuth, async (req, res) => {
-  const postId = req.body.id;
+  const deletePostByIdResponse = await deletePostById(req.params.id);
+
+  console.log(deletePostByIdResponse);
 
   res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
   });
-  res.status(statusCode.OK).end(`Successfully deleted post with id ${postId}`);
+
+  if (deletePostByIdResponse.affectedRows === 1) {
+    deletePostByIdResponse.message = "Delete Success";
+  }
+
+  res.end(JSON.stringify(deletePostByIdResponse));
 });
 
 app.get(`${endPointRoot}/location/:location`, checkAuth, async (req, res) => {
@@ -232,13 +241,14 @@ app.put(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
 });
 
 app.put(`${endPointRoot}/post`, checkAuth, async (req, res) => {
-  const id = req.params.id;
+  const { id, message } = req.body;
+  const updatePostByIdResponse = await updatePostById(id, message);
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
 
   res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
   });
-  res.status(statusCode.OK).end(`Successfully updated post with id ${id}`);
+  res.end(JSON.stringify(updatePostByIdResponse));
 });
 
 app.listen(port, () => {

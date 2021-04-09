@@ -198,6 +198,7 @@ const createPost = ({ imageSrc, location, message, postId }) => {
 
   const divColumnPost = document.createElement("div");
   divColumnPost.setAttribute("class", "col-md-10 mb-3");
+  divColumnPost.setAttribute("id", `post-id-${postId}`);
 
   const divCardMb3 = document.createElement("div");
   divColumnPost.setAttribute("class", "card mb-3");
@@ -320,6 +321,23 @@ const updateUserPassword = (password) => {
     // TODO: successful password change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
+    }
+  };
+};
+
+const deletePostById = (id) => {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open(DELETE, `${endPointRoot}/post/${id}`, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("Authorization", getTokenLS());
+  xhttp.send();
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+      const response = JSON.parse(this.response);
+      console.log(response);
+
+      document.getElementById(`post-id-${id}`).remove();
     }
   };
 };

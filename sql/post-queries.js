@@ -1,8 +1,33 @@
 const connection = require("./db-connection");
 
-const updatePost = ({ id, quote, author }) => {
-  // TODO: create proper query for update
-  const query = `UPDATE QUOTES SET QUOTE = "${quote}", AUTHOR = "${author}" WHERE ID = ${id}`;
+const createPost = async ({ username, imagePath, locationName, message }) => {
+  const sqlData = {
+    Username: username,
+    ImagePath: imagePath,
+    LocationName: locationName,
+    Message: message,
+  };
+
+  const query = `
+    INSERT INTO Post SET ?
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, sqlData, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const deletePostById = (id) => {
+  const query = `
+    DELETE
+    FROM Post
+    WHERE ID = ${id}
+  `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {
@@ -46,19 +71,14 @@ const getPostsByUsername = (username) => {
   });
 };
 
-const createPost = async ({ username, imagePath, locationName, message }) => {
-  const sqlData = {
-    Username: username,
-    ImagePath: imagePath,
-    LocationName: locationName,
-    Message: message,
-  };
-
+const updatePostById = (id, message) => {
   const query = `
-    INSERT INTO Post SET ?
+    UPDATE Post
+    SET Message = '${message}'
+    WHERE ID = id
   `;
   return new Promise((resolve, reject) => {
-    connection.query(query, sqlData, (err, result) => {
+    connection.query(query, (err, result) => {
       if (err) {
         console.log(err);
         reject(err);
@@ -70,7 +90,8 @@ const createPost = async ({ username, imagePath, locationName, message }) => {
 
 module.exports = {
   createPost,
+  deletePostById,
   getPostsByLocationName,
   getPostsByUsername,
-  updatePost,
+  updatePostById,
 };
