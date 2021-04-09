@@ -5,7 +5,11 @@ const swaggerUi = require("swagger-ui-express");
 
 const locationSQL = require("./sql/location-queries");
 const { comparePasswords, hashPassword } = require("./util/hash-password");
-const { createPost, getPostsByLocationName } = require("./sql/post-queries");
+const {
+  createPost,
+  getPostsByLocationName,
+  getPostsByUsername,
+} = require("./sql/post-queries");
 const statisticsSQL = require("./sql/stat-queries");
 const statusCode = require("./http/status-codes");
 const swaggerDocument = require("./swagger.json");
@@ -45,8 +49,8 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
-app.delete(`${endPointRoot}/location`, checkAuth, async (req, res) => {
-  const location = req.body.location;
+app.delete(`${endPointRoot}/location/:id`, checkAuth, async (req, res) => {
+  const location = req.params.location;
 
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.DELETE);
   res.writeHead(statusCode.OK, {
@@ -57,7 +61,7 @@ app.delete(`${endPointRoot}/location`, checkAuth, async (req, res) => {
     .end(`Successfully deleted location with name ${location}`);
 });
 
-app.delete(`${endPointRoot}/post`, checkAuth, async (req, res) => {
+app.delete(`${endPointRoot}/post/:id`, checkAuth, async (req, res) => {
   const postId = req.body.id;
 
   res.writeHead(statusCode.OK, {
@@ -72,7 +76,6 @@ app.get(`${endPointRoot}/location/:location`, checkAuth, async (req, res) => {
     `${endPointRoot}/location/:location`,
     requestType.GET,
   );
-
   res.writeHead(statusCode.OK, {
     "Content-Type": "text/html",
   });
@@ -85,13 +88,23 @@ app.get(`${endPointRoot}/post/:location`, checkAuth, async (req, res) => {
   const getPostsByLocationNameResponse = await getPostsByLocationName(
     req.params.location,
   );
-  console.log(getPostsByLocationNameResponse);
+
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.GET);
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
   res.end(JSON.stringify(getPostsByLocationNameResponse));
+});
+
+app.get(`${endPointRoot}/posts/:username`, checkAuth, async (req, res) => {
+  const username = req.params.username;
+  const getPostsByUsernameResponse = await getPostsByUsername(username);
+  console.log(getPostsByUsernameResponse);
+  res.writeHead(statusCode.OK, {
+    "Content-Type": "application/json",
+  });
+  res.end(JSON.stringify(getPostsByUsernameResponse));
 });
 
 app.get(`${endPointRoot}/location`, checkAuth, async (req, res) => {
@@ -122,6 +135,7 @@ app.get(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
+
   res.end(JSON.stringify(getUserByIdResponse));
 });
 
@@ -141,9 +155,10 @@ app.post(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const relativeFilePath = `/images/${filename}`;
 
   writeFileToPath(fileSrc, absoluteFilePath);
-  console.log({ fileSrc, filename, locationName, message, userId });
+  const getUserByIdResponse = await getUserById(userId);
+  console.log(getUserByIdResponse);
   const createPostResponse = await createPost({
-    userId,
+    username: getUserByIdResponse[0].Username,
     imagePath: relativeFilePath,
     locationName,
     message,

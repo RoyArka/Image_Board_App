@@ -36,7 +36,7 @@ const register = () => {
       const response = JSON.parse(this.response);
       console.log(response);
       localStorage.setItem("user-id", response.insertId);
-      window.location.href = "/home";
+      window.location.href = "/login";
     }
 
     // TODO: handle user with name already exists

@@ -30,9 +30,25 @@ const getPostsByLocationName = (locationName) => {
   });
 };
 
-const createPost = async ({ userId, imagePath, locationName, message }) => {
+const getPostsByUsername = (username) => {
+  const query = `
+    SELECT * FROM Post
+    WHERE Username = '${username}'
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const createPost = async ({ username, imagePath, locationName, message }) => {
   const sqlData = {
-    UserID: userId,
+    Username: username,
     ImagePath: imagePath,
     LocationName: locationName,
     Message: message,
@@ -55,5 +71,6 @@ const createPost = async ({ userId, imagePath, locationName, message }) => {
 module.exports = {
   createPost,
   getPostsByLocationName,
+  getPostsByUsername,
   updatePost,
 };

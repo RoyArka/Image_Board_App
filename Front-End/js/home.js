@@ -85,28 +85,20 @@ const locationPost = () => {
 
 //AJAX Location GET
 const locationGet = () => {
-  // xhttp.open(GET, `${endPointRoot}/location`, true);
-  //xhttp.setRequestHeader("Authorization", getTokenLS());
-  // xhttp.send();
-  // xhttp.onreadystatechange = function () {
-  //   if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
-  //     const rootLocations = document.getElementById("rootLocations");
-  //     const locationsResponse = JSON.parse(this.response);
+  xhttp.open(GET, `${endPointRoot}/location`, true);
+  xhttp.setRequestHeader("Authorization", getTokenLS());
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+      const rootLocations = document.getElementById("rootLocations");
+      const locationsResponse = JSON.parse(this.response);
 
-  //     locationsResponse.forEach((location) => {
-  //       const locTitle = createLocTitle(location.Name);
-  //       rootLocations.appendChild(locTitle);
-  //     });
-  //   }
-
-  const stubbedResponse = `[{"Name":"Tokyo"}, {"Name":"Toronto"}, {"Name":"Paris"}]`;
-  const rootLocations = document.getElementById("rootLocations");
-  const locationsResponse = JSON.parse(stubbedResponse);
-
-  locationsResponse.forEach((location) => {
-    const link = createLink(location.Name);
-    const locTitle = createLocTitle(location.Name);
-    rootLocations.appendChild(link);
-    link.appendChild(locTitle);
-  });
+      locationsResponse.forEach((location) => {
+        const link = createLink(location.Name);
+        const locTitle = createLocTitle(location.Name);
+        rootLocations.appendChild(link);
+        link.appendChild(locTitle);
+      });
+    }
+  };
 };
