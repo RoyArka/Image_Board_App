@@ -159,6 +159,9 @@ app.post(`${endPointRoot}/post`, checkAuth, async (req, res) => {
     message,
   });
 
+  console.log("GET USER BY ID RESPONSE", getUserByIdResponse);
+  console.log("CREATE POST RESPONSE", createPostResponse);
+
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.POST);
 
   res.writeHead(statusCode.CREATED, {
@@ -242,8 +245,11 @@ app.put(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
 
 app.put(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const { id, message } = req.body;
+
   const updatePostByIdResponse = await updatePostById(id, message);
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
+
+  console.log("UPDATE POST BY ID RESPONSE", updatePostByIdResponse);
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",

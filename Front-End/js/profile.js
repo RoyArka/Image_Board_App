@@ -16,6 +16,7 @@ const HTTP_STATUS_CODE_OK = 200;
 const POST = "POST";
 const PUT = "PUT";
 const AUTHBEARER = "Bearer ";
+let messageContents = "";
 
 const createRowPassword = (password) => {
   const divHeader = document.getElementById("row-header-password");
@@ -232,6 +233,7 @@ const createPost = ({ imageSrc, location, message, postId }) => {
   const divPostMessage = document.createElement("div");
   divPostMessage.setAttribute("class", "mt-3");
   divPostMessage.setAttribute("class", "post-message");
+  divPostMessage.setAttribute("id", `post-message-${postId}`);
   divPostMessage.innerHTML = message;
 
   // Create Div For Buttons
@@ -247,7 +249,8 @@ const createPost = ({ imageSrc, location, message, postId }) => {
     "class",
     "btn btn-lg btn-outline-info update-button",
   );
-  updateButton.setAttribute("onclick", `updatePostById(${postId})`);
+  updateButton.setAttribute("onclick", `handleUpdateMessageButton(${postId})`);
+  updateButton.setAttribute("id", `update-button-${postId}`);
   updateButton.innerHTML = "Update";
 
   // Delete Button
@@ -256,9 +259,9 @@ const createPost = ({ imageSrc, location, message, postId }) => {
     "class",
     "btn btn-lg btn-outline-danger delete-button",
   );
-
-  deleteButton.setAttribute("onclick", `deletePostById(${postId})`);
   deleteButton.innerHTML = "Delete";
+  deleteButton.setAttribute("id", `delete-button-${postId}`);
+  deleteButton.setAttribute("onclick", `handleDeleteMessageButton(${postId})`);
 
   divColumnPost.appendChild(divCardMb3);
   divCardMb3.appendChild(cardBodyPost);
@@ -325,6 +328,36 @@ const updateUserPassword = (password) => {
   };
 };
 
+const handleDeleteMessageButton = (postId) => {
+  if (
+    document.getElementById(`delete-button-${postId}`).innerHTML === "Delete"
+  ) {
+    deletePostById(postId);
+    return;
+  }
+
+  if (
+    document.getElementById(`delete-button-${postId}`).innerHTML === "Cancel"
+  ) {
+    handleCancelUpdateMessage(postId);
+    return;
+  }
+};
+
+const handleUpdateMessageButton = (postId) => {
+  if (
+    document.getElementById(`update-button-${postId}`).innerHTML === "Update"
+  ) {
+    handleUpdateMessage(postId);
+    return;
+  }
+
+  if (document.getElementById(`update-button-${postId}`).innerHTML === "Save") {
+    handleCompletedUpdateMessage(postId);
+    return;
+  }
+};
+
 const deletePostById = (id) => {
   const xhttp = new XMLHttpRequest();
   xhttp.open(DELETE, `${endPointRoot}/post/${id}`, true);
@@ -340,6 +373,103 @@ const deletePostById = (id) => {
       document.getElementById(`post-id-${id}`).remove();
     }
   };
+};
+
+const updatePostById = (id, message) => {
+  const xhttp = new XMLHttpRequest();
+
+  const payload = {
+    id: id,
+    message: message,
+  };
+
+  xhttp.open(PUT, `${endPointRoot}/post`, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("Authorization", getTokenLS());
+  xhttp.send(JSON.stringify(payload));
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+      const response = JSON.parse(this.response);
+      console.log(response);
+    }
+  };
+};
+
+const handleCompletedUpdateMessage = (postId) => {
+  // update update-button to update
+  const updateButton = document.getElementById(`update-button-${postId}`);
+  updateButton.setAttribute(
+    "class",
+    "btn btn-lg btn-outline-info update-button",
+  );
+  updateButton.innerHTML = "Update";
+
+  // update delete-button to delete
+  const deleteButton = document.getElementById(`delete-button-${postId}`);
+  deleteButton.innerHTML = "Delete";
+
+  // get message from input
+  const input = document.getElementById(`post-message-input-${postId}`);
+  const message = input.value;
+
+  // save message contents
+  const messageDiv = document.getElementById(`post-message-${postId}`);
+  messageDiv.innerHTML = message;
+
+  input.remove();
+
+  updatePostById(postId, message);
+};
+
+const handleUpdateMessage = (postId) => {
+  // update update-button to save
+  const updateButton = document.getElementById(`update-button-${postId}`);
+  updateButton.setAttribute(
+    "class",
+    "btn btn-lg btn-outline-success update-button",
+  );
+  updateButton.innerHTML = "Save";
+
+  // update delete-button to cancel
+  const deleteButton = document.getElementById(`delete-button-${postId}`);
+  deleteButton.innerHTML = "Cancel";
+
+  // save message contents
+  const messageDiv = document.getElementById(`post-message-${postId}`);
+  messageContents = messageDiv.innerHTML;
+  messageDiv.innerHTML = "";
+
+  // create input
+  const input = document.createElement("input");
+  input.setAttribute("class", "form-control");
+  input.setAttribute("id", `post-message-input-${postId}`);
+  input.setAttribute("placeholder", "New Message");
+  input.setAttribute("type", "text");
+
+  messageDiv.appendChild(input);
+};
+
+const handleCancelUpdateMessage = (postId) => {
+  // update update-button to update
+  const updateButton = document.getElementById(`update-button-${postId}`);
+  updateButton.setAttribute(
+    "class",
+    "btn btn-lg btn-outline-info update-button",
+  );
+  updateButton.innerHTML = "Update";
+
+  // update delete-button to delete
+  const deleteButton = document.getElementById(`delete-button-${postId}`);
+  deleteButton.innerHTML = "Delete";
+
+  // get message from input
+  const input = document.getElementById(`post-message-input-${postId}`);
+  input.remove();
+
+  // save message contents
+  const messageDiv = document.getElementById(`post-message-${postId}`);
+  messageDiv.innerHTML = messageContents;
 };
 
 //Grabs valid token stored in local storage.
