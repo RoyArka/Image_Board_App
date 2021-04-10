@@ -18,7 +18,7 @@ const createLocation = async (name) => {
 };
 
 const deleteLocationByName = async (name) => {
-  const query = `DELETE FROM Location WHERE Name = ${name}`;
+  const query = `DELETE FROM Location WHERE Name = '${name}'`;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {

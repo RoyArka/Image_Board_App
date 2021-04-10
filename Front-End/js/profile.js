@@ -152,7 +152,6 @@ const loadProfile = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response).response;
-      console.log(response);
       const { Admin, DateJoined, Username } = response[0];
 
       const rowDateJoined = document.getElementById("row-date-joined");

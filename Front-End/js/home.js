@@ -19,8 +19,9 @@ const xhttp = new XMLHttpRequest();
 const AUTHBEARER = "Bearer ";
 
 //Creates div around each location link
-const createDiv = () => {
+const createDiv = (inputLocation) => {
   const div = document.createElement("div");
+  div.setAttribute("id", inputLocation)
   return div;
 };
 
@@ -51,10 +52,8 @@ const setLocationID = (locationId) => {
 const createDeleteButton = (inputLocation) => {
   const button = document.createElement("button");
   button.setAttribute("id", inputLocation);
-  button.setAttribute(
-    "class",
-    "btn btn-sm btn-outline-danger delete-button hide",
-  );
+  button.setAttribute("class", "btn btn-sm btn-outline-danger delete-button hide");
+  button.setAttribute("onclick", "handleDelete(this.id)");
   button.innerHTML = "Delete";
   return button;
 };
@@ -88,7 +87,6 @@ const locationPost = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CREATED) {
       const response = JSON.parse(this.response);
-      console.log(this.response);
       if (response.affectedRows === 0) {
         renderResponse(`${locationValue} already exists`, false);
         return;
@@ -99,13 +97,19 @@ const locationPost = () => {
       const root = document.getElementById("rootLocations");
       //Grabing location from input
       const inputLocation = document.getElementById("inputLocation").value;
+      //Location Div
+      const div = createDiv(inputLocation);
       //Location title
       const locTitle = createLocTitle(inputLocation);
       //Link for locations
       const link = createLink(inputLocation);
+      //Delete Button
+      const deleteButton = createDeleteButton(inputLocation);
       //appending elements
-      root.appendChild(link);
-      link.append(locTitle);
+      root.appendChild(div);
+      div.append(link);
+      link.appendChild(locTitle);
+      div.appendChild(deleteButton);
     }
   };
 };
@@ -121,14 +125,14 @@ const locationGet = () => {
       const locationsResponse = JSON.parse(this.response).data;
       console.log(locationsResponse);
       locationsResponse.forEach((location) => {
-        const div = createDiv();
+        const div = createDiv(location.Name);
         const link = createLink(location.Name);
         const locTitle = createLocTitle(location.Name);
         const deleteButton = createDeleteButton(location.Name);
         rootLocations.appendChild(div);
         div.append(link);
         link.appendChild(locTitle);
-        link.appendChild(deleteButton);
+        div.appendChild(deleteButton);
       });
     }
   };
@@ -142,18 +146,12 @@ const renderResponse = (message, isSuccess) => {
     responseMessage.classList.add("response-success");
     responseMessage.classList.remove("hide");
 
-    responseMessage.classList.add("response-success");
-    responseMessage.classList.remove("hide");
-
     setTimeout(() => {
       responseMessage.classList.add("hide");
       responseMessage.classList.remove("response-success");
     }, 2000);
     return;
   }
-
-  responseMessage.classList.add("response-error");
-  responseMessage.classList.remove("hide");
 
   responseMessage.classList.add("response-error");
   responseMessage.classList.remove("hide");
@@ -185,4 +183,42 @@ const handleEdit = () => {
   for (let i = 0, len = elements.length; i < len; i++) {
     elements[i].classList.add("hide");
   }
+};
+
+//AJAX Location Delete
+const deleteLocation = (location) => {
+  const xhttp2 = new XMLHttpRequest();
+  xhttp2.open(DELETE, `${endPointRoot}/location/${location}`, true);
+  xhttp2.setRequestHeader("Content-Type", "application/json");
+  xhttp2.setRequestHeader("Authorization", getTokenLS());
+  xhttp2.send();
+
+  xhttp2.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+      document.getElementById(location).remove();
+    }
+  };
+};
+
+//AJAX Location posts
+const getLocationPosts = (location) => {
+  xhttp.open(GET, `${endPointRoot}/location/${location}`);
+  xhttp.setRequestHeader("Authorization", getTokenLS());
+  xhttp.send();
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
+      const response = JSON.parse(this.response).data;
+      console.log(response);
+      if (response.length === 0) {
+        // No posts for location can delete
+        deleteLocation(location);
+      }
+    }
+  };
+};
+
+//Handles Delete of location
+const handleDelete = (location) => {
+  getLocationPosts(location);
 };
