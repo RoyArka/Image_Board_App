@@ -28,7 +28,7 @@ const loadPosts = () => {
 
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
-      const response = JSON.parse(this.response);
+      const response = JSON.parse(this.response).data;
       console.log(response);
       if (response.length === 0) {
         // No posts for location... display message

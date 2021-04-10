@@ -52,17 +52,21 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
-//TODO: will need to change the response here once this is fully done
 app.delete(`${endPointRoot}/location/:id`, checkAuth, async (req, res) => {
-  const location = req.params.location;
+  const deleteLocationByIdResponse = await locationSQL.deleteLocationByName(
+    req.params.id,
+  );
 
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.DELETE);
   res.writeHead(statusCode.OK, {
-    "Content-Type": "text/html",
+    "Content-Type": "application/json",
   });
-  res
-    .status(statusCode.OK)
-    .end(`Successfully deleted location with name ${location}`);
+
+  if (deleteLocationByIdResponse.affectedRows === 1) {
+    deleteLocationByIdResponse.message = responseMsg.DEL_LOCATION_SUCCESS;
+  }
+
+  res.status(statusCode.OK).end(JSON.stringify(deleteLocationByIdResponse));
 });
 
 app.delete(`${endPointRoot}/post/:id`, checkAuth, async (req, res) => {
@@ -88,10 +92,15 @@ app.get(`${endPointRoot}/location/:location`, checkAuth, async (req, res) => {
 
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.GET);
 
+  const properResponse = {
+    message: responseMsg.GET_POSTS_SUCCESS,
+    data: getPostsByLocationNameResponse,
+  };
+
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
-  res.end(JSON.stringify(getPostsByLocationNameResponse));
+  res.end(JSON.stringify(properResponse));
 });
 
 app.get(`${endPointRoot}/posts/:username`, checkAuth, async (req, res) => {
