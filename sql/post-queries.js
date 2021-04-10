@@ -75,7 +75,7 @@ const updatePostById = (id, message) => {
   const query = `
     UPDATE Post
     SET Message = '${message}'
-    WHERE ID = id
+    WHERE ID = ${id}
   `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
