@@ -28,7 +28,7 @@ const onload = () => {
     if (this.readyState == 4 && this.status == HTTP_CODE_FORBIDDEN) {
       const statsResponse = JSON.parse(this.response);
       console.log(statsResponse);
-      renderResponse("Forbidden, admin status required", false);
+      renderResponse("Forbidden, admin status required");
     }
   };
 };
@@ -62,7 +62,7 @@ const clearLocalStorage = () => {
   localStorage.removeItem("token");
 };
 
-const renderResponse = (message, isSuccess) => {
+const renderResponse = (message) => {
   const responseMessage = document.getElementById("response-message");
   responseMessage.innerHTML = message;
 
