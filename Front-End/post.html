@@ -6,14 +6,17 @@
 <link rel="stylesheet" href="css/post.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<body>
 
+<body>
     <!--Navbar on Homepage-->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <a class="navbar-brand" href="/">
             <span id="nav-logo">&#128247;</span>
         </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navBarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navBarMenu">
             <div class="navbar-nav">
                 <a class="nav-item nav-link active" href="profile">Profile</a>
                 <a class="nav-item nav-link active" href="home">Home</a>
@@ -43,10 +46,12 @@
                     </div>
                     <div class="form-group">
                         <label for="inputLocation">Enter a Location:</label>
-                        <input type="text" class="form-control" id="inputLocation" placeholder="Vancouver" style="width: 400px">
+                        <input type="text" class="form-control" id="inputLocation" placeholder="Vancouver"
+                            style="width: 400px">
                         <br>
                         <label for="inputCaption">Caption your image:</label>
-                        <input type="text" class="form-control" id="inputCaption" placeholder="Enter a caption" style="width: 400px">
+                        <input type="text" class="form-control" id="inputCaption" placeholder="Enter a caption"
+                            style="width: 400px">
                     </div>
                     <button type="submit" class="btn btn-primary">Post</button>
                 </form>
