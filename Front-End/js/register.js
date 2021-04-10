@@ -21,6 +21,16 @@ const register = () => {
   const password = document.getElementById("inputPassword").value;
   const username = document.getElementById("inputUsername").value;
 
+  if (password.trim() === "") {
+    renderResponse("Password can't be empty", false);
+    return;
+  }
+
+  if (username.trim() === "") {
+    renderResponse("Username can't be empty", true);
+    return;
+  }
+
   xhttp.open(POST, `${endPointRoot}/register`, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
 

@@ -232,8 +232,6 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   };
 
   if (!userData) {
-    // TODO: handle invalid username
-    console.log("Incorrect Credentials");
     res
       .status(statusCode.HTTP_STATUS_CODE_CONFLICT)
       .end(JSON.stringify(invalidUserRes));
@@ -246,8 +244,6 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   );
 
   if (!correctCredentials) {
-    //TODO: handle incorrect credentials
-    console.log("Incorrect Credentials");
     res
       .status(statusCode.HTTP_STATUS_CODE_CONFLICT)
       .end(JSON.stringify(invalidPassRes));

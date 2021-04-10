@@ -42,12 +42,36 @@ const authenticate = (username, password) => {
     // TODO: handle user doesn't exist
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
+      renderResponse(response.message, false);
     }
 
-    // TODO: handle server error
     if (this.readyState == 4 && this.status == 500) {
       const response = JSON.parse(this.response);
+      renderResponse("Server error", false);
     }
-    console.log(this);
   };
+};
+
+const renderResponse = (message, isSuccess) => {
+  const responseMessage = document.getElementById("response-message");
+  responseMessage.innerHTML = message;
+
+  if (isSuccess) {
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    setTimeout(() => {
+      responseMessage.classList.add("hide");
+      responseMessage.classList.remove("response-success");
+    }, 3500);
+    return;
+  }
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  setTimeout(() => {
+    responseMessage.classList.add("hide");
+    responseMessage.classList.remove("response-error");
+  }, 3500);
 };
