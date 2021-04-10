@@ -2,6 +2,7 @@ const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 
 const swaggerDocument = require("../swagger.json");
+const checkAuth = require("../Back-End/util/check-auth");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,15 +17,8 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
-// TODO: routes will need to be changed to  "BASE-URL/API/V1/"" . . .
-
-//documentation page
-app.get("/doc", (req, res) => {
-  res.sendFile(__dirname + "/documentation.html");
-});
-
 //home page
-app.get("/home", (req, res) => {
+app.get("/home", checkAuth, (req, res) => {
   res.sendFile(__dirname + "/home.html");
 });
 
@@ -34,7 +28,7 @@ app.get("/", (req, res) => {
 });
 
 //profile page
-app.get("/profile", (req, res) => {
+app.get("/profile", checkAuth, (req, res) => {
   res.sendFile(__dirname + "/profile.html");
 });
 
@@ -44,12 +38,12 @@ app.get("/register", (req, res) => {
 });
 
 //stats page for requests
-app.get("/stats", (req, res) => {
+app.get("/stats", checkAuth, (req, res) => {
   res.sendFile(__dirname + "/admin.html");
 });
 
 //location page
-app.get("/location", (req, res) => {
+app.get("/location", checkAuth, (req, res) => {
   res.sendFile(__dirname + "/location.html");
 });
 
@@ -59,7 +53,7 @@ app.get("/logout", (req, res) => {
 });
 
 //post page
-app.get("/post", (req, res) => {
+app.get("/post", checkAuth, (req, res) => {
   res.sendFile(__dirname + "/post.html");
 });
 

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+const config = require("../../config");
 const key = config.JWT_KEY;
 const statusCode = require("../http/status-codes");
 const failedAuth = "Unauthorized Client, Authentication Failed";
