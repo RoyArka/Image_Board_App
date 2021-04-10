@@ -130,7 +130,7 @@ const locationGet = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const rootLocations = document.getElementById("rootLocations");
-      const locationsResponse = JSON.parse(this.response).response;
+      const locationsResponse = JSON.parse(this.response).data;
       console.log(locationsResponse);
       locationsResponse.forEach((location) => {
         const div = createDiv();
