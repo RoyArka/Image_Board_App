@@ -15,7 +15,7 @@ const statsGet = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const rootStats = document.getElementById("rootStats");
-      const statsResponse = JSON.parse(this.response);
+      const statsResponse = JSON.parse(this.response).response;
       rootStats.innerHTML = formatStatisticsResult(statsResponse);
     }
   };
