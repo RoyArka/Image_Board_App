@@ -213,7 +213,10 @@ const getLocationPosts = (location) => {
       if (response.length === 0) {
         // No posts for location can delete
         deleteLocation(location);
+        return;
       }
+
+      renderResponse(`Can't delete locations with posts`, false);
     }
   };
 };
