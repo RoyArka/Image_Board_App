@@ -42,6 +42,7 @@ const authenticate = (username, password) => {
     // TODO: handle user doesn't exist
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
+      renderResponse("User does not exist", false);
     }
 
     // TODO: handle server error
@@ -50,4 +51,28 @@ const authenticate = (username, password) => {
     }
     console.log(this);
   };
+};
+
+const renderResponse = (message, isSuccess) => {
+  const responseMessage = document.getElementById("response-message");
+  responseMessage.innerHTML = message;
+
+  if (isSuccess) {
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    setTimeout(() => {
+      responseMessage.classList.add("hide");
+      responseMessage.classList.remove("response-success");
+    }, 2000);
+    return;
+  }
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  setTimeout(() => {
+    responseMessage.classList.add("hide");
+    responseMessage.classList.remove("response-error");
+  }, 2000);
 };

@@ -297,7 +297,6 @@ const updateUserUsername = (username) => {
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    // TODO: successful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
       const cardUsername = document.getElementById("card-username");
@@ -305,13 +304,11 @@ const updateUserUsername = (username) => {
       renderResponse("Successful username change", true);
     }
 
-    // TODO: client error (duplicate username) unsuccessful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
       renderResponse("User with this name already exists", false);
     }
 
-    // TODO: server error
     if (this.readyState == 4 && this.status == 500) {
       const response = JSON.parse(this.response);
       renderResponse("Something went wrong", false);
@@ -331,7 +328,6 @@ const updateUserPassword = (password) => {
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    // TODO: successful password change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
       renderResponse("Successful password change", true);
