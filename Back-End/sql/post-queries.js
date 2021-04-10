@@ -1,13 +1,97 @@
-const db = require("./db-connection");
+const connection = require("./db-connection");
 
-const update = ({ id, quote, author }) => {
-  const query = `UPDATE QUOTES SET QUOTE = "${quote}", AUTHOR = "${author}" WHERE ID = ${id}`;
-  db.query(query, (err, res) => {
-    if (err) throw err;
-    console.log(res);
+const createPost = async ({ username, imagePath, locationName, message }) => {
+  const sqlData = {
+    Username: username,
+    ImagePath: imagePath,
+    LocationName: locationName,
+    Message: message,
+  };
+
+  const query = `
+    INSERT INTO Post SET ?
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, sqlData, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const deletePostById = (id) => {
+  const query = `
+    DELETE
+    FROM Post
+    WHERE ID = ${id}
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const getPostsByLocationName = (locationName) => {
+  const query = `
+    SELECT * FROM Post
+    WHERE LocationName = '${locationName}'
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const getPostsByUsername = (username) => {
+  const query = `
+    SELECT * FROM Post
+    WHERE Username = '${username}'
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const updatePostById = (id, message) => {
+  const query = `
+    UPDATE Post
+    SET Message = '${message}'
+    WHERE ID = ${id}
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+    });
   });
 };
 
 module.exports = {
-  update,
+  createPost,
+  deletePostById,
+  getPostsByLocationName,
+  getPostsByUsername,
+  updatePostById,
 };

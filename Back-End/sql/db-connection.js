@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const config = require("../../config");
+const config = require("../config");
 const password = config.DB_KEY;
 
 // eslint-disable-next-line no-unused-vars

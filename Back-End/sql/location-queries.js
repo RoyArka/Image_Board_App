@@ -1,7 +1,11 @@
 const connection = require("./db-connection");
 
 const createLocation = async (name) => {
-  const query = `INSERT INTO Location(Name) values ('${name}')`;
+  const query = `
+    INSERT IGNORE
+    INTO Location
+    SET Name = '${name}'
+  `;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {
@@ -14,7 +18,7 @@ const createLocation = async (name) => {
 };
 
 const deleteLocationByName = async (name) => {
-  const query = `DELETE FROM Location WHERE Name = ${name}`;
+  const query = `DELETE FROM Location WHERE Name = '${name}'`;
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {
