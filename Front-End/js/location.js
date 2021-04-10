@@ -108,3 +108,33 @@ const getTokenLS = () => {
   const authValue = AUTHBEARER + token;
   return authValue;
 };
+
+const clearLocalStorage = () => {
+  localStorage.removeItem("user-id");
+  localStorage.removeItem("location-id");
+  localStorage.removeItem("token");
+};
+
+const renderResponse = (message, isSuccess) => {
+  const responseMessage = document.getElementById("response-message");
+  responseMessage.innerHTML = message;
+
+  if (isSuccess) {
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    setTimeout(() => {
+      responseMessage.classList.add("hide");
+      responseMessage.classList.remove("response-success");
+    }, 3500);
+    return;
+  }
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  setTimeout(() => {
+    responseMessage.classList.add("hide");
+    responseMessage.classList.remove("response-error");
+  }, 3500);
+};

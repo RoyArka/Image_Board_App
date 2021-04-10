@@ -41,17 +41,15 @@ const register = () => {
       window.location.href = "/home";
     }
 
-    // TODO: handle user with name already exists
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
       renderResponse("User with this name already exists", false);
     }
 
-    // TODO: handle server error
     if (this.readyState == 4 && this.status == 500) {
       const response = JSON.parse(this.response);
+      renderResponse("Server error", false);
     }
-    console.log(this);
   };
 };
 
@@ -66,7 +64,7 @@ const renderResponse = (message, isSuccess) => {
     setTimeout(() => {
       responseMessage.classList.add("hide");
       responseMessage.classList.remove("response-success");
-    }, 2000);
+    }, 3500);
     return;
   }
 
@@ -76,5 +74,5 @@ const renderResponse = (message, isSuccess) => {
   setTimeout(() => {
     responseMessage.classList.add("hide");
     responseMessage.classList.remove("response-error");
-  }, 2000);
+  }, 3500);
 };

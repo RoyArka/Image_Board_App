@@ -231,3 +231,10 @@ const getLocationPosts = (location) => {
 const handleDelete = (location) => {
   getLocationPosts(location);
 };
+
+const clearLocalStorage = () => {
+  localStorage.removeItem("user-id");
+  localStorage.removeItem("location-id");
+  localStorage.removeItem("admin");
+  localStorage.removeItem("token");
+};

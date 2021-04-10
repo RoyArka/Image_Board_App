@@ -131,7 +131,20 @@ app.get(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   res.end(JSON.stringify(properResponse));
 });
 
-app.get(`${endPointRoot}/stats`, checkAuth, async (req, res) => {
+app.post(`${endPointRoot}/stats`, checkAuth, async (req, res) => {
+  // check if user is admin
+  console.log(req.body);
+  const getUserByIdResponse = await getUserById(req.body.id);
+  console.log("STATS getUserByIdResponse", getUserByIdResponse);
+
+  if (!getUserByIdResponse[0].Admin) {
+    res.writeHead(statusCode.FORBIDDEN, {
+      "Content-Type": "application/json",
+    });
+    res.end(JSON.stringify({ message: responseMsg.FORBIDDEN_ACCESS }));
+    return;
+  }
+
   const selectAllResponse = await selectAllFromStats();
   await incrementEndpointStats(`${endPointRoot}/stats`, requestType.GET);
 

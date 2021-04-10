@@ -496,7 +496,7 @@ const renderResponse = (message, isSuccess) => {
     setTimeout(() => {
       responseMessage.classList.add("hide");
       responseMessage.classList.remove("response-success");
-    }, 2000);
+    }, 3500);
     return;
   }
 
@@ -506,7 +506,7 @@ const renderResponse = (message, isSuccess) => {
   setTimeout(() => {
     responseMessage.classList.add("hide");
     responseMessage.classList.remove("response-error");
-  }, 2000);
+  }, 3500);
 };
 
 //Grabs valid token stored in local storage.
@@ -514,4 +514,11 @@ const getTokenLS = () => {
   const token = localStorage.getItem("token");
   const authValue = AUTHBEARER + token;
   return authValue;
+};
+
+const clearLocalStorage = () => {
+  localStorage.removeItem("user-id");
+  localStorage.removeItem("location-id");
+  localStorage.removeItem("admin");
+  localStorage.removeItem("token");
 };
