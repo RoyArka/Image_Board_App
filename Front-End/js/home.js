@@ -74,6 +74,12 @@ const getTokenLS = () => {
 //AJAX Location POST
 const locationPost = () => {
   const locationValue = document.getElementById("inputLocation").value;
+
+  if (locationValue.trim() === "") {
+    renderResponse("Location can't be empty");
+    return;
+  }
+
   const data = JSON.stringify({
     location: locationValue,
   });
