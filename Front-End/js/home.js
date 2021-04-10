@@ -17,12 +17,19 @@ const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
 const AUTHBEARER = "Bearer ";
 
+//Creates div around each location link
+const createDiv = () => {
+  const div = document.createElement("div");
+  return div;
+};
+
 //Creates title link for locations
 const createLocTitle = (inputLocation) => {
   const locTitle = document.createElement("h4");
   locTitle.innerHTML = inputLocation;
   locTitle.setAttribute("id", inputLocation);
   locTitle.setAttribute("onclick", "setLocationID(this.id)");
+  locTitle.setAttribute("class", "d-inline-flex");
   return locTitle;
 };
 
@@ -39,19 +46,34 @@ const setLocationID = (locationId) => {
   localStorage.setItem("location-id", locationId);
 };
 
+//Creates delete button for location
+const createDeleteButton = (inputLocation) => {
+  const button = document.createElement("button");
+  button.setAttribute("id", inputLocation);
+  button.setAttribute("class", "btn btn-outline-danger delete-button");
+  button.innerHTML = "Delete";
+  return button;
+};
+
 //Creates Location Block
 const createLocation = () => {
   //root location for appending locations
   const root = document.getElementById("rootLocations");
   //Grabing location from input
   const inputLocation = document.getElementById("inputLocation").value;
+  //Location Div
+  const div = createDiv();
   //Location title
   const locTitle = createLocTitle(inputLocation);
   //Link for locations
   const link = createLink(inputLocation);
+  //Delete Button
+  const deleteButton = createDeleteButton(inputLocation);
   //appending elements
-  root.appendChild(link);
-  link.append(locTitle);
+  root.appendChild(div);
+  div.append(link);
+  link.appendChild(locTitle);
+  link.appendChild(deleteButton);
   //Call POST function
   locationPost();
 };
@@ -91,13 +113,17 @@ const locationGet = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const rootLocations = document.getElementById("rootLocations");
-      const locationsResponse = JSON.parse(this.response);
-
+      const locationsResponse = JSON.parse(this.response).response;
+      console.log(locationsResponse);
       locationsResponse.forEach((location) => {
+        const div = createDiv();
         const link = createLink(location.Name);
         const locTitle = createLocTitle(location.Name);
-        rootLocations.appendChild(link);
+        const deleteButton = createDeleteButton(location.Name);
+        rootLocations.appendChild(div);
+        div.append(link);
         link.appendChild(locTitle);
+        link.appendChild(deleteButton);
       });
     }
   };
