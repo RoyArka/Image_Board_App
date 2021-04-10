@@ -112,7 +112,7 @@ app.get(`${endPointRoot}/location`, checkAuth, async (req, res) => {
 
   const properResponse = {
     message: responseMsg.GET_LOCATIONS_SUCCESS,
-    response: selectAllResponse,
+    data: selectAllResponse,
   };
 
   res.writeHead(statusCode.OK, {
@@ -128,7 +128,7 @@ app.get(`${endPointRoot}/stats`, checkAuth, async (req, res) => {
   const properResponse = {
     message: responseMsg.GET_STATS_SUCCESS,
     response: selectAllResponse,
-  }
+  };
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
@@ -155,7 +155,7 @@ app.get(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
 app.post(`${endPointRoot}/location`, checkAuth, async (req, res) => {
   const createLocationResponse = await createLocation(req.body.location);
   await incrementEndpointStats(`${endPointRoot}/location`, requestType.POST);
-
+  console.log("CREATE LOCATION RESPONSE", createLocationResponse);
   createLocationResponse.message = responseMsg.LOCATION_SUCCESS;
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
@@ -178,6 +178,9 @@ app.post(`${endPointRoot}/post`, checkAuth, async (req, res) => {
     message,
   });
 
+  const createLocationResponse = await createLocation(locationName);
+
+  console.log("CREATE LOCATION RESPONSE", createLocationResponse);
   console.log("GET USER BY ID RESPONSE", getUserByIdResponse);
   console.log("CREATE POST RESPONSE", createPostResponse);
 
@@ -198,12 +201,12 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   const invalidPassRes = {
     message: responseMsg.INCORRECT_PASSWORD,
     response: getUserByUsernameResponse,
-  }
+  };
 
   const invalidUserRes = {
     message: responseMsg.INCORRECT_USERNAME,
     response: getUserByUsernameResponse,
-  }
+  };
 
   if (!userData) {
     // TODO: handle invalid username
@@ -283,7 +286,7 @@ app.put(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
 app.put(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const { id, message } = req.body;
 
-  const updatePostByIdResponse = await updatePostById(id, message);
+  let updatePostByIdResponse = await updatePostById(id, message);
   await incrementEndpointStats(`${endPointRoot}/post`, requestType.PUT);
 
   console.log("UPDATE POST BY ID RESPONSE", updatePostByIdResponse);

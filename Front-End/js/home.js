@@ -12,6 +12,7 @@ const endPointRoot = isProduction()
 const GET = "GET";
 const HTTP_STATUS_CODE_CONFLICT = 409;
 const HTTP_STATUS_CODE_OK = 200;
+const HTTP_STATUS_CODE_CREATED = 201;
 const POST = "POST";
 const PUT = "PUT";
 const xhttp = new XMLHttpRequest();
@@ -41,17 +42,6 @@ const setLocationID = (locationId) => {
 
 //Creates Location Block
 const createLocation = () => {
-  //root location for appending locations
-  const root = document.getElementById("rootLocations");
-  //Grabing location from input
-  const inputLocation = document.getElementById("inputLocation").value;
-  //Location title
-  const locTitle = createLocTitle(inputLocation);
-  //Link for locations
-  const link = createLink(inputLocation);
-  //appending elements
-  root.appendChild(link);
-  link.append(locTitle);
   //Call POST function
   locationPost();
 };
@@ -77,8 +67,24 @@ const locationPost = () => {
   xhttp.send(data);
 
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
-      console.log(this.responseText);
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CREATED) {
+      const response = JSON.parse(this.response);
+      console.log(this.response);
+      if (response.affectedRows === 0) {
+        alert("Already Exists");
+        return;
+      }
+      //root location for appending locations
+      const root = document.getElementById("rootLocations");
+      //Grabing location from input
+      const inputLocation = document.getElementById("inputLocation").value;
+      //Location title
+      const locTitle = createLocTitle(inputLocation);
+      //Link for locations
+      const link = createLink(inputLocation);
+      //appending elements
+      root.appendChild(link);
+      link.append(locTitle);
     }
   };
 };
@@ -91,9 +97,9 @@ const locationGet = () => {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const rootLocations = document.getElementById("rootLocations");
-      const locationsResponse = JSON.parse(this.response);
+      const locationsData = JSON.parse(this.response).data;
 
-      locationsResponse.forEach((location) => {
+      locationsData.forEach((location) => {
         const link = createLink(location.Name);
         const locTitle = createLocTitle(location.Name);
         rootLocations.appendChild(link);
