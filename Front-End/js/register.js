@@ -9,6 +9,7 @@ const endPointRoot = isProduction()
   : "4537/termproject/API/V1";
 const GET = "GET";
 const HTTP_STATUS_CODE_BAD_REQUEST = 400;
+const HTTP_STATUS_CODE_CONFLICT = 409;
 const HTTP_STATUS_CODE_CREATED = 201;
 const HTTP_STATUS_CODE_OK = 200;
 const POST = "POST";
@@ -36,12 +37,14 @@ const register = () => {
       const response = JSON.parse(this.response);
       console.log(response);
       localStorage.setItem("user-id", response.insertId);
-      window.location.href = "/login";
+      localStorage.setItem("token", response.token);
+      window.location.href = "/home";
     }
 
     // TODO: handle user with name already exists
-    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_BAD_REQUEST) {
+    if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
+      renderResponse("User with this name already exists", false);
     }
 
     // TODO: handle server error
@@ -50,4 +53,28 @@ const register = () => {
     }
     console.log(this);
   };
+};
+
+const renderResponse = (message, isSuccess) => {
+  const responseMessage = document.getElementById("response-message");
+  responseMessage.innerHTML = message;
+
+  if (isSuccess) {
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    setTimeout(() => {
+      responseMessage.classList.add("hide");
+      responseMessage.classList.remove("response-success");
+    }, 2000);
+    return;
+  }
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  setTimeout(() => {
+    responseMessage.classList.add("hide");
+    responseMessage.classList.remove("response-error");
+  }, 2000);
 };

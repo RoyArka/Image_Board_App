@@ -102,6 +102,9 @@ const createRowUsernameEditable = () => {
 
 const handleDoneChangePassword = () => {
   const newPassword = document.getElementById("row-password-input").value;
+
+  if (newPassword.trim() === "") return;
+
   let maskedPassword = "";
   for (let i = 0; i < newPassword.length; i++) {
     maskedPassword += "*";
@@ -123,6 +126,8 @@ const handleChangePassword = () => {
 
 const handleDoneChangeUsername = () => {
   const newUsername = document.getElementById("row-username-input").value;
+
+  if (newUsername.trim() === "") return;
 
   document.getElementById("row-username-input").remove();
   document.getElementById("row-username-btn-editable").remove();
@@ -146,7 +151,8 @@ const loadProfile = () => {
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
-      const response = JSON.parse(this.response);
+      const response = JSON.parse(this.response).response;
+      console.log(response);
       const { Admin, DateJoined, Username } = response[0];
 
       const rowDateJoined = document.getElementById("row-date-joined");
@@ -292,19 +298,24 @@ const updateUserUsername = (username) => {
   xhttp.send(JSON.stringify(payload));
 
   xhttp.onreadystatechange = function () {
-    // TODO: sucessful username change
+    // TODO: successful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
+      const cardUsername = document.getElementById("card-username");
+      cardUsername.innerHTML = username;
+      renderResponse("Successful username change", true);
     }
 
     // TODO: client error (duplicate username) unsuccessful username change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_CONFLICT) {
       const response = JSON.parse(this.response);
+      renderResponse("User with this name already exists", false);
     }
 
     // TODO: server error
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState == 4 && this.status == 500) {
       const response = JSON.parse(this.response);
+      renderResponse("Something went wrong", false);
     }
   };
 };
@@ -324,6 +335,7 @@ const updateUserPassword = (password) => {
     // TODO: successful password change
     if (this.readyState == 4 && this.status == HTTP_STATUS_CODE_OK) {
       const response = JSON.parse(this.response);
+      renderResponse("Successful password change", true);
     }
   };
 };
@@ -397,6 +409,12 @@ const updatePostById = (id, message) => {
 };
 
 const handleCompletedUpdateMessage = (postId) => {
+  // get message from input
+  const input = document.getElementById(`post-message-input-${postId}`);
+  const message = input.value;
+
+  if (message.trim() === "") return;
+
   // update update-button to update
   const updateButton = document.getElementById(`update-button-${postId}`);
   updateButton.setAttribute(
@@ -408,10 +426,6 @@ const handleCompletedUpdateMessage = (postId) => {
   // update delete-button to delete
   const deleteButton = document.getElementById(`delete-button-${postId}`);
   deleteButton.innerHTML = "Delete";
-
-  // get message from input
-  const input = document.getElementById(`post-message-input-${postId}`);
-  const message = input.value;
 
   // save message contents
   const messageDiv = document.getElementById(`post-message-${postId}`);
@@ -470,6 +484,30 @@ const handleCancelUpdateMessage = (postId) => {
   // save message contents
   const messageDiv = document.getElementById(`post-message-${postId}`);
   messageDiv.innerHTML = messageContents;
+};
+
+const renderResponse = (message, isSuccess) => {
+  const responseMessage = document.getElementById("response-message");
+  responseMessage.innerHTML = message;
+
+  if (isSuccess) {
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    setTimeout(() => {
+      responseMessage.classList.add("hide");
+      responseMessage.classList.remove("response-success");
+    }, 2000);
+    return;
+  }
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  setTimeout(() => {
+    responseMessage.classList.add("hide");
+    responseMessage.classList.remove("response-error");
+  }, 2000);
 };
 
 //Grabs valid token stored in local storage.

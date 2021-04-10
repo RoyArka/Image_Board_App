@@ -21,6 +21,7 @@ const { writeFileToPath } = require("./util/image-utils");
 const { createToken } = require("./util/auth-token");
 const checkAuth = require("./util/check-auth");
 const responseMsg = require("./http/response-message");
+const { response } = require("express");
 
 const { createLocation, selectAllFromLocation } = locationSQL;
 const { incrementEndpointStats, selectAllFromStats } = statisticsSQL;
@@ -211,7 +212,9 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   if (!userData) {
     // TODO: handle invalid username
     console.log("Incorrect Credentials");
-    res.status(statusCode.HTTP_STATUS_CODE_CONFLICT).end(JSON.stringify(invalidUserRes));
+    res
+      .status(statusCode.HTTP_STATUS_CODE_CONFLICT)
+      .end(JSON.stringify(invalidUserRes));
     return;
   }
 
@@ -223,7 +226,9 @@ app.post(`${endPointRoot}/login`, async (req, res) => {
   if (!correctCredentials) {
     //TODO: handle incorrect credentials
     console.log("Incorrect Credentials");
-    res.status(statusCode.HTTP_STATUS_CODE_CONFLICT).end(JSON.stringify(invalidPassRes));
+    res
+      .status(statusCode.HTTP_STATUS_CODE_CONFLICT)
+      .end(JSON.stringify(invalidPassRes));
     return;
   }
 
@@ -249,6 +254,18 @@ app.post(`${endPointRoot}/register`, async (req, res) => {
     username,
   });
 
+  if (registerUserResponse.code === "ER_DUP_ENTRY") {
+    registerUserResponse.message = responseMsg.DUPLICATE_ENTRY_ERROR;
+    res.writeHead(statusCode.HTTP_STATUS_CODE_CONFLICT, {
+      "Content-Type": "application/json",
+    });
+    res.end(JSON.stringify(registerUserResponse));
+    return;
+  }
+
+  //Creating token for user
+  const token = createToken(username, registerUserResponse.insertId);
+  registerUserResponse.token = token;
   registerUserResponse.message = responseMsg.REGISTER_SUCCESS;
   res.writeHead(statusCode.CREATED, {
     "Content-Type": "application/json",
@@ -265,6 +282,14 @@ app.put(`${endPointRoot}/user/:id`, checkAuth, async (req, res) => {
       id,
       username,
     });
+
+    if (updateUserByIdResponse.code === "ER_DUP_ENTRY") {
+      updateUserByIdResponse.message = responseMsg.DUPLICATE_ENTRY_ERROR;
+      res.writeHead(statusCode.HTTP_STATUS_CODE_CONFLICT, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(updateUserByIdResponse));
+    }
   }
   if (password) {
     updateUserByIdResponse = await updatePasswordByUserId({

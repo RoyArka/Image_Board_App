@@ -1,4 +1,5 @@
 const connection = require("./db-connection");
+const ERROR_DUPLICATE_ENTRY = "ER_DUP_ENTRY";
 
 const updateUsernameByUserId = ({ id, username }) => {
   const query = `
@@ -10,6 +11,7 @@ const updateUsernameByUserId = ({ id, username }) => {
     connection.query(query, (err, result) => {
       if (err) {
         console.log(err);
+        if (err.code === ERROR_DUPLICATE_ENTRY) resolve(err);
         reject(err);
       }
       resolve(result);
@@ -74,12 +76,14 @@ const registerUser = ({ dateJoined, isAdmin, password, username }) => {
     VALUES ('${username}', '${password}', ${dateJoined}, ${isAdmin})
   `;
 
-  const ERROR_DUPLICATE_ENTRY = "ER_DUP_ENTRY";
   return new Promise((resolve, reject) => {
     connection.query(query, (err, result) => {
       if (err) {
         console.log(err);
-        if (err.code === ERROR_DUPLICATE_ENTRY) resolve(err);
+        if (err.code === ERROR_DUPLICATE_ENTRY) {
+          resolve(err);
+          return;
+        }
         reject(err);
       }
       resolve(result);

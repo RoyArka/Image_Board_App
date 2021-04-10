@@ -51,30 +51,16 @@ const setLocationID = (locationId) => {
 const createDeleteButton = (inputLocation) => {
   const button = document.createElement("button");
   button.setAttribute("id", inputLocation);
-  button.setAttribute("class", "btn btn-outline-danger delete-button");
+  button.setAttribute(
+    "class",
+    "btn btn-sm btn-outline-danger delete-button hide",
+  );
   button.innerHTML = "Delete";
   return button;
 };
 
 //Creates Location Block
 const createLocation = () => {
-  //root location for appending locations
-  const root = document.getElementById("rootLocations");
-  //Grabing location from input
-  const inputLocation = document.getElementById("inputLocation").value;
-  //Location Div
-  const div = createDiv();
-  //Location title
-  const locTitle = createLocTitle(inputLocation);
-  //Link for locations
-  const link = createLink(inputLocation);
-  //Delete Button
-  const deleteButton = createDeleteButton(inputLocation);
-  //appending elements
-  root.appendChild(div);
-  div.append(link);
-  link.appendChild(locTitle);
-  link.appendChild(deleteButton);
   //Call POST function
   locationPost();
 };
@@ -104,9 +90,11 @@ const locationPost = () => {
       const response = JSON.parse(this.response);
       console.log(this.response);
       if (response.affectedRows === 0) {
-        alert("Already Exists");
+        renderResponse(`${locationValue} already exists`, false);
         return;
       }
+      renderResponse(`${locationValue} successfully added`, true);
+
       //root location for appending locations
       const root = document.getElementById("rootLocations");
       //Grabing location from input
@@ -144,4 +132,57 @@ const locationGet = () => {
       });
     }
   };
+};
+
+const renderResponse = (message, isSuccess) => {
+  const responseMessage = document.getElementById("response-message");
+  responseMessage.innerHTML = message;
+
+  if (isSuccess) {
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    responseMessage.classList.add("response-success");
+    responseMessage.classList.remove("hide");
+
+    setTimeout(() => {
+      responseMessage.classList.add("hide");
+      responseMessage.classList.remove("response-success");
+    }, 2000);
+    return;
+  }
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  responseMessage.classList.add("response-error");
+  responseMessage.classList.remove("hide");
+
+  setTimeout(() => {
+    responseMessage.classList.add("hide");
+    responseMessage.classList.remove("response-error");
+  }, 2000);
+};
+
+const handleEdit = () => {
+  const editButton = document.getElementById("edit-button");
+
+  const elements = document.getElementsByClassName("delete-button");
+  if (editButton.innerHTML === "Edit") {
+    editButton.innerHTML = "Done Editing";
+    editButton.setAttribute("class", "btn btn-outline-success");
+    console.log(elements);
+
+    for (let i = 0, len = elements.length; i < len; i++) {
+      elements[i].classList.remove("hide");
+    }
+
+    return;
+  }
+  editButton.innerHTML = "Edit";
+  editButton.setAttribute("class", "btn btn-outline-warning");
+
+  for (let i = 0, len = elements.length; i < len; i++) {
+    elements[i].classList.add("hide");
+  }
 };

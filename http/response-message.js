@@ -14,6 +14,9 @@ const REGISTER_SUCCESS = "Registration Successful";
 const POST_SUCCESS = "Successfully created a Post";
 const LOCATION_SUCCESS = "Successfully created a Location";
 
+//POST error messages
+const DUPLICATE_ENTRY_ERROR = "Duplicate entry for username";
+
 //login fail messages
 const INCORRECT_USERNAME = "Login Failed, incorrect username";
 const INCORRECT_PASSWORD = "Login Failed, incorrect password";
@@ -25,6 +28,7 @@ const PUT_POST_SUCCESS = "Successfully updated user information";
 module.exports = {
   DEL_LOCATION_SUCCESS,
   DEL_POST_SUCCESS,
+  DUPLICATE_ENTRY_ERROR,
   GET_POSTS_SUCCESS,
   GET_LOCATIONS_SUCCESS,
   GET_USER_SUCCESS,
