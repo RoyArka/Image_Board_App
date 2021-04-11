@@ -61,9 +61,16 @@ app.delete(`${endPointRoot}/location/:id`, checkAuth, async (req, res) => {
     "Content-Type": "application/json",
   });
 
-  if (deleteLocationByIdResponse.affectedRows === 1) {
-    deleteLocationByIdResponse.message = responseMsg.DEL_LOCATION_SUCCESS;
+  if (deleteLocationByIdResponse.affectedRows != 1) {
+    deleteLocationByIdResponse.message = responseMsg.DEL_LOCATION_ERROR;
+    res
+      .status(statusCode.BAD_REQUEST)
+      .end(JSON.stringify(deleteLocationByIdResponse));
+    return;
   }
+
+  deleteLocationByIdResponse.message = responseMsg.DEL_LOCATION_SUCCESS;
+  res.status(statusCode.OK).end(JSON.stringify(deleteLocationByIdResponse));
 
   res.status(statusCode.OK).end(JSON.stringify(deleteLocationByIdResponse));
 });
@@ -71,15 +78,22 @@ app.delete(`${endPointRoot}/location/:id`, checkAuth, async (req, res) => {
 app.delete(`${endPointRoot}/post/:id`, checkAuth, async (req, res) => {
   const deletePostByIdResponse = await deletePostById(req.params.id);
 
+  await incrementEndpointStats(`${endPointRoot}/post/:id`, requestType.DELETE);
   console.log(deletePostByIdResponse);
 
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
 
-  if (deletePostByIdResponse.affectedRows === 1) {
+  if (deletePostByIdResponse.affectedRows !== 1) {
     deletePostByIdResponse.message = responseMsg.DEL_POST_SUCCESS;
+    res
+      .status(statusCode.BAD_REQUEST)
+      .end(JSON.stringify(deletePostByIdResponse));
+    return;
   }
+
+  deletePostByIdResponse.message = responseMsg.DEL_POST_SUCCESS;
 
   res.end(JSON.stringify(deletePostByIdResponse));
 });
@@ -106,7 +120,10 @@ app.get(`${endPointRoot}/posts/:username`, checkAuth, async (req, res) => {
   const username = req.params.username;
   const getPostsByUsernameResponse = await getPostsByUsername(username);
   console.log(getPostsByUsernameResponse);
-
+  await incrementEndpointStats(
+    `${endPointRoot}/posts/:username`,
+    requestType.GET,
+  );
   res.writeHead(statusCode.OK, {
     "Content-Type": "application/json",
   });
@@ -134,7 +151,7 @@ app.post(`${endPointRoot}/stats`, checkAuth, async (req, res) => {
   console.log(req.body);
   const getUserByIdResponse = await getUserById(req.body.id);
   console.log("STATS getUserByIdResponse", getUserByIdResponse);
-
+  await incrementEndpointStats(`${endPointRoot}/stats`, requestType.POST);
   if (!getUserByIdResponse[0].Admin) {
     res.writeHead(statusCode.FORBIDDEN, {
       "Content-Type": "application/json",
@@ -186,7 +203,7 @@ app.post(`${endPointRoot}/location`, checkAuth, async (req, res) => {
 
 app.post(`${endPointRoot}/post`, checkAuth, async (req, res) => {
   const { fileSrc, filename, locationName, message, userId } = req.body;
-  const absoluteFilePath = `${__dirname}/images/${filename}`;
+  const absoluteFilePath = `home/micheal_o/public_html/images/${filename}`;
   const relativeFilePath = `/images/${filename}`;
 
   writeFileToPath(fileSrc, absoluteFilePath);

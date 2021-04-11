@@ -79,27 +79,149 @@
     }
   },
   "paths": {
-    "/location": {
+    "/post": {
       "delete": {
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces":["application/json"],
+        "deprecated": false,
+        "description": "Delete a Post",
+        "operationId": "deletePostById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of post to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted post with id"
+          },
+          "400": {
+            "description": "Failed to delete post with id"
+          }
+        },
+        "summary": "Delete a location",
+        "tags": ["post"]
+      },
+      "get": {
         "consumes": [],
         "deprecated": false,
-        "description": "",
+        "description": "Returns all locations",
         "externalDocs": {},
-        "operationId": "deleteLocationByName",
+        "operationId": "selectAllFromLocation",
         "parameters": [],
-        "produces":[],
+        "produces":["text/html"],
         "responses": {
-          "201": {
-            "description": "",
-            "$ref": "",
-            "examples": {},
-            "headers": {},
-            "schema": {}
+          "200": {
+            "description": "Successful Response"
           }
         },
         "security": [],
         "schemes": [],
-        "summary": "",
+        "summary": "Return a list of all locations",
+        "tags": ["post"]
+      },
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"
+        ],
+        "deprecated": false,
+        "description": "Create a location",
+        "operationId": "createLocationByName",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "body",
+            "description": "Name of location to create",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "location": "Kelowna"
+              }
+            }
+          }
+        ],
+        "produces":["text/html"],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Create a location",
+        "tags": ["post"]
+      },
+      "put": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"
+        ],
+        "deprecated": false,
+        "description": "Create a location",
+        "operationId": "createLocationByName",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "body",
+            "description": "Name of location to create",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "location": "Kelowna"
+              }
+            }
+          }
+        ],
+        "produces":["text/html"],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Create a location",
+        "tags": ["post"]
+      }
+    },
+    "/location": {
+      "delete": {
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces":["application/json"],
+        "deprecated": false,
+        "description": "Delete a Location",
+        "operationId": "createLocationByName",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "location",
+            "description": "Name of location to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted location with name"
+          },
+          "400": {
+            "description": "Failed to delete location with name"
+          }
+        },
+        "summary": "Delete a location",
         "tags": ["location"]
       },
       "get": {
@@ -155,28 +277,6 @@
           }
         },
         "summary": "Create a location",
-        "tags": ["location"]
-      },
-      "put": {
-        "consumes": [],
-        "deprecated": false,
-        "description": "",
-        "externalDocs": {},
-        "operationId": "",
-        "parameters": [],
-        "produces":[],
-        "responses": {
-          "201": {
-            "description": "",
-            "$ref": "",
-            "examples": {},
-            "headers": {},
-            "schema": {}
-          }
-        },
-        "security": [],
-        "schemes": [],
-        "summary": "",
         "tags": ["location"]
       }
     },
