@@ -29,7 +29,7 @@ const FORBIDDEN_ACCESS =
 
 //PUT sucess messages
 const PUT_USER_SUCCESS = "Successfully updated user information";
-const PUT_POST_SUCCESS = "Successfully updated user information";
+const PUT_POST_SUCCESS = "Successfully updated post message";
 
 module.exports = {
   DEL_LOCATION_SUCCESS,
