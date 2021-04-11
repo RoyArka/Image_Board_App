@@ -125,27 +125,38 @@
       },
       "post": {
         "consumes": [
-          "application/x-www-form-urlencoded",
-          "text/html"
+          "application/json"
         ],
+        "produces":["application/json"],
         "deprecated": false,
-        "description": "Create a location",
-        "operationId": "createLocationByName",
+        "description": "Create a post",
+        "operationId": "createPost",
         "parameters": [
+          {
+            "name": "fileSrc",
+            "in": "body",
+            "description": "file source",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": {
+                "fileSrc": "Vancouver"
+              }
+            }
+          },
           {
             "name": "location",
             "in": "body",
-            "description": "Name of location to create",
+            "description": "Name of location to create post for",
             "required": true,
             "schema": {
-              "type": "object",
+              "type": "string",
               "example": {
-                "location": "Kelowna"
+                "location": "Vancouver"
               }
             }
           }
         ],
-        "produces":["text/html"],
         "responses": {
           "201": {
             "description": "Created"
