@@ -91,6 +91,27 @@
             "in": "path",
             "name": "id",
             "description": "ID of post to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted post with id"
+          },
+          "400": {
+            "description": "Failed to delete post with id"
+          }
+        },
+        "summary": "Delete a location",
+        "tags": ["post"]
+        "deprecated": false,
+        "description": "Delete a Post",
+        "operationId": "deletePostById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of post to delete",
             "required": true,
             "type": "number"
           },
@@ -299,11 +320,60 @@
         "security": [],
         "schemes": [],
         "summary": "Return a list of all locations",
-        "tags": ["location"]
+        "tags": ["post"]
       },
       "post": {
         "consumes": [
           "application/json"
+        ],
+        "produces":["application/json"],
+        "deprecated": false,
+        "description": "Create a post",
+        "operationId": "createPost",
+        "parameters": [
+          {
+            "name": "fileSrc",
+            "in": "body",
+            "description": "file source",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": {
+                "fileSrc": "Vancouver"
+              }
+            }
+          },
+          {
+            "name": "location",
+            "in": "body",
+            "description": "Name of location to create post for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": {
+                "location": "Vancouver"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Create a location",
+        "tags": ["post"]
+      },
+      "put": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"
         ],
         "deprecated": false,
         "description": "Create a location",
@@ -346,14 +416,124 @@
           }
         },
         "summary": "Create a location",
+        "tags": ["post"]
+      }
+    },
+    "/location": {
+      "delete": {
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces":["application/json"],
+        "deprecated": false,
+        "description": "Delete a Location",
+        "operationId": "createLocationByName",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "location",
+            "description": "Name of location to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted location with name"
+          },
+          "400": {
+            "description": "Failed to delete location with name"
+          }
+        },
+        "summary": "Delete a location",
+        "tags": ["location"]
+      },
+      "get": {
+        "consumes": [],
+        "deprecated": false,
+        "description": "Returns all locations",
+        "externalDocs": {},
+        "operationId": "selectAllFromLocation",
+        "parameters": [],
+        "produces":["text/html"],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "Return a list of all locations",
+        "tags": ["location"]
+      },
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"
+        ],
+        "deprecated": false,
+        "description": "Create a location",
+        "operationId": "createLocationByName",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "body",
+            "description": "Name of location to create",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "location": "Kelowna"
+              }
+            }
+          }
+        ],
+        "produces":["text/html"],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Create a location",
         "tags": ["location"]
       }
     },
     "/stats": {
-      "get": {
-        "consumes": [],
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"],
         "deprecated": false,
         "description": "Returns number of requests served for all endpoints",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "body",
+            "description": "Id of User",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "1"
+              }
+            }
+          }
+        ],
+        "produces":["application/json"],
         "operationId": "",
         "parameters": [],
         "produces":["application,json"],
@@ -361,16 +541,97 @@
           "200": {
             "description": "Successful Response",
             "examples": {}
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "security": [],
         "schemes": [],
-        "summary": "Returns a list of request method and endpoint pairs with corresponding number of time each endpoint was hit",
+        "summary": "Returns list of stats",
         "tags": ["stats"]
+      }
+    },
+    "/login": {
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"],
+        "deprecated": false,
+        "description": "Returns registerd users Id and auth-token",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "Name and password of registerd user",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "username": "username",
+                "password": "password"
+              }
+            }
+          }
+        ],
+        "produces":["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "examples": {}
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "Logs in registered user",
+        "tags": ["login"]
+      }
+    },
+    "/register": {
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "text/html"],
+        "deprecated": false,
+        "description": "Returns registerd users Id and auth-token",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "Name and password of registerd user",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "username": "username",
+                "password": "password"
+              }
+            }
+          }
+        ],
+        "produces":["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "examples": {}
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [],
+        "schemes": [],
+        "summary": "registers a user",
+        "tags": ["register"]
       }
     }
   },
-
   "parameters": {},
   "produces":[],
   "responses": {},
@@ -385,7 +646,7 @@
         "url": ""
       },
       "name": "location",
-      "description": ""
+      "description": "Locations created by users"
     },
     {
       "externalDocs": {
@@ -393,7 +654,7 @@
         "url": ""
       },
       "name": "login",
-      "description": ""
+      "description": "Logs in user"
     },
     {
       "externalDocs": {
@@ -401,7 +662,7 @@
         "url": ""
       },
       "name": "post",
-      "description": ""
+      "description": "User posts"
     },
     {
       "externalDocs": {
@@ -409,7 +670,7 @@
         "url": ""
       },
       "name": "stats",
-      "description": "Stats for each existing endpoint"
+      "description": "Stats for each existing endpoints"
     },
     {
       "externalDocs": {
