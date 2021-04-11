@@ -91,7 +91,19 @@
             "in": "path",
             "name": "id",
             "description": "ID of post to delete",
-            "required": true
+            "required": true,
+            "type": "number"
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
           }
         ],
         "responses": {
@@ -109,10 +121,21 @@
         "consumes": [],
         "deprecated": false,
         "description": "Returns all locations",
-        "externalDocs": {},
         "operationId": "selectAllFromLocation",
-        "parameters": [],
-        "produces":["text/html"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
+          }
+        ],
+        "produces":["application/json"],
         "responses": {
           "200": {
             "description": "Successful Response"
@@ -133,39 +156,36 @@
         "operationId": "createPost",
         "parameters": [
           {
-            "name": "fileSrc",
+            "name": "",
             "in": "body",
-            "description": "file source",
+            "description": "Post Details",
             "required": true,
             "schema": {
-              "type": "string",
+              "type": "object",
               "example": {
-                "fileSrc": "Vancouver"
+                "fileSrc": "/spiderman.jpeg",
+                "filename": "spiderman-mask",
+                "locationName": "Vancouver",
+                "message": "With great power comes great responsibility",
+                "userId": "1"
               }
             }
           },
           {
-            "name": "location",
-            "in": "body",
-            "description": "Name of location to create post for",
+            "in": "header",
+            "name": "Authorization",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": {
-                "location": "Vancouver"
-              }
-            }
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
+            "description": "Successfully created a Post"
           }
         },
         "summary": "Create a location",
@@ -173,39 +193,44 @@
       },
       "put": {
         "consumes": [
-          "application/x-www-form-urlencoded",
-          "text/html"
+          "application/json"
         ],
+        "produces":["application/json"],
         "deprecated": false,
-        "description": "Create a location",
+        "description": "Update a post",
         "operationId": "createLocationByName",
         "parameters": [
           {
-            "name": "location",
+            "name": "",
             "in": "body",
-            "description": "Name of location to create",
+            "description": "Update details for post",
             "required": true,
             "schema": {
               "type": "object",
               "example": {
-                "location": "Kelowna"
+                "id": "1",
+                "message": "I'm gonna put some dirt in your eye."
               }
             }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
           }
         ],
-        "produces":["text/html"],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
+          "200": {
+            "description": "Successfully updated user information"
           }
         },
-        "summary": "Create a location",
+        "summary": "Update a posting",
         "tags": ["post"]
       }
     },
@@ -221,7 +246,19 @@
             "in": "path",
             "name": "location",
             "description": "Name of location to delete",
-            "required": true
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
           }
         ],
         "responses": {
@@ -239,10 +276,21 @@
         "consumes": [],
         "deprecated": false,
         "description": "Returns all locations",
-        "externalDocs": {},
         "operationId": "selectAllFromLocation",
-        "parameters": [],
-        "produces":["text/html"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
+          }
+        ],
+        "produces":["application/json"],
         "responses": {
           "200": {
             "description": "Successful Response"
@@ -270,12 +318,23 @@
             "schema": {
               "type": "object",
               "example": {
-                "location": "Kelowna"
+                "location": "Vancouver"
               }
             }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string"
           }
         ],
-        "produces":["text/html"],
+        "produces":["application/json"],
         "responses": {
           "201": {
             "description": "Created"
@@ -298,7 +357,7 @@
         "description": "Returns number of requests served for all endpoints",
         "operationId": "",
         "parameters": [],
-        "produces":["text/html"],
+        "produces":["application,json"],
         "responses": {
           "200": {
             "description": "Successful Response",
