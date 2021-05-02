@@ -1,4 +1,4 @@
-### Image Board - an online image board 
+### Image Board - an online imageboard 
 
 ### Description
 * A web application where users can post images with captions to certain location boards.
